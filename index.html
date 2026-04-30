@@ -1,14 +1,861 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/hemodynamics/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>hemodynamics</title>
-    <script type="module" crossorigin src="/hemodynamics/assets/index-Bg5lV_3h.js"></script>
-    <link rel="stylesheet" crossorigin href="/hemodynamics/assets/index-Cmxymz5r.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HemoLab — Interactive Hemodynamics by Perfusia</title>
+  <meta name="description" content="Free, open clinical education tools for nursing students, ICU nurses, and CRNA candidates. Built by a software engineer in nursing school." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #08080e;
+      --surface:   rgba(255,255,255,0.03);
+      --border:    rgba(255,255,255,0.07);
+      --text:      #ffffff;
+      --muted:     rgba(255,255,255,0.38);
+      --hint:      rgba(255,255,255,0.18);
+      --green:     #34d399;
+      --blue:      #93c5fd;
+      --amber:     #fbbf24;
+      --red:       #f87171;
+      --serif:     'DM Serif Display', Georgia, serif;
+      --mono:      'DM Mono', 'Courier New', monospace;
+      --sans:      'DM Sans', system-ui, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-weight: 300;
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Grain overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.6;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 60px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(8,8,14,0.85);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .nav-brand-super {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(99,179,237,0.65);
+    }
+
+    .nav-brand-name {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 8px 18px;
+      border-radius: 6px;
+      border: 1px solid rgba(52,211,153,0.3);
+      color: var(--green) !important;
+      background: rgba(52,211,153,0.06);
+      transition: all 0.15s !important;
+    }
+
+    .nav-cta:hover {
+      background: rgba(52,211,153,0.12) !important;
+      border-color: rgba(52,211,153,0.5) !important;
+      color: var(--green) !important;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 120px 48px 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .hero-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(52,211,153,0.6);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.1s;
+    }
+
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(48px, 7vw, 88px);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      max-width: 800px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.2s;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--green);
+    }
+
+    .hero-sub {
+      margin-top: 28px;
+      font-size: 17px;
+      color: var(--muted);
+      max-width: 540px;
+      line-height: 1.7;
+      font-weight: 300;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.35s;
+    }
+
+    .hero-actions {
+      margin-top: 44px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.5s;
+    }
+
+    .btn-primary {
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 14px 28px;
+      border-radius: 8px;
+      border: none;
+      background: var(--green);
+      color: #031a10;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: all 0.15s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background: #6ee7b7;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 14px 28px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: all 0.15s;
+      display: inline-block;
+    }
+
+    .btn-secondary:hover {
+      border-color: rgba(255,255,255,0.2);
+      color: var(--text);
+    }
+
+    /* ── Live stats ticker ── */
+    .hero-stats {
+      margin-top: 72px;
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      max-width: 640px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.65s;
+    }
+
+    .stat-item {
+      flex: 1;
+      padding: 16px 20px;
+      border-right: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .stat-item:last-child { border-right: none; }
+
+    .stat-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--hint);
+      margin-bottom: 6px;
+    }
+
+    .stat-value {
+      font-family: var(--mono);
+      font-size: 22px;
+      font-weight: 300;
+      color: var(--text);
+    }
+
+    .stat-value span {
+      font-size: 11px;
+      color: var(--muted);
+      margin-left: 3px;
+    }
+
+    .stat-status {
+      font-size: 10px;
+      margin-top: 3px;
+    }
+
+    /* ── Animated MAP value ── */
+    .map-value { transition: color 0.4s; }
+
+    /* ── Section ── */
+    section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 100px 48px;
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--hint);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+    }
+
+    .section-body {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.75;
+    }
+
+    /* ── Story section ── */
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .story-quote {
+      font-family: var(--serif);
+      font-size: clamp(20px, 2.5vw, 28px);
+      font-style: italic;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.75);
+      border-left: 2px solid var(--green);
+      padding-left: 24px;
+      margin: 32px 0;
+    }
+
+    .story-attr {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--hint);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Tools grid ── */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 48px;
+    }
+
+    .tool-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      background: var(--surface);
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--card-accent, transparent);
+      transition: opacity 0.2s;
+    }
+
+    .tool-card:hover {
+      border-color: rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.05);
+      transform: translateY(-2px);
+    }
+
+    .tool-card.available { --card-accent: var(--green); }
+    .tool-card.planned   { --card-accent: rgba(255,255,255,0.1); }
+
+    .tool-status {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 99px;
+      display: inline-block;
+      align-self: flex-start;
+    }
+
+    .tool-status.live    { color: var(--green); background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.2); }
+    .tool-status.soon    { color: var(--muted); background: rgba(255,255,255,0.04); border: 1px solid var(--border); }
+
+    .tool-name {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1.2;
+    }
+
+    .tool-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .tool-lessons {
+      margin-top: auto;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--hint);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Lessons list ── */
+    .lessons-list {
+      margin-top: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .lesson-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s;
+    }
+
+    .lesson-row:last-child { border-bottom: none; }
+    .lesson-row:hover { background: rgba(255,255,255,0.03); }
+    .lesson-row.available:hover { background: rgba(52,211,153,0.04); }
+
+    .lesson-num {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--hint);
+      width: 24px;
+      flex-shrink: 0;
+    }
+
+    .lesson-info { flex: 1; }
+
+    .lesson-title {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .lesson-sub {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .lesson-tag {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 99px;
+    }
+
+    .lesson-tag.live { color: var(--green); background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.15); }
+    .lesson-tag.soon { color: var(--hint); background: rgba(255,255,255,0.03); border: 1px solid var(--border); }
+
+    .lesson-arrow {
+      font-size: 14px;
+      color: var(--hint);
+      transition: transform 0.15s, color 0.15s;
+    }
+
+    .lesson-row.available:hover .lesson-arrow {
+      transform: translateX(4px);
+      color: var(--green);
+    }
+
+    /* ── Audience section ── */
+    .audience-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 48px;
+    }
+
+    .audience-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 24px;
+      background: var(--surface);
+    }
+
+    .audience-icon {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 12px;
+    }
+
+    .audience-title {
+      font-family: var(--serif);
+      font-size: 20px;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .audience-body {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-brand {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--hint);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-size: 12px;
+      color: var(--hint);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .footer-links a:hover { color: var(--muted); }
+
+    /* ── Divider ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      nav { padding: 0 24px; }
+      .hero { padding: 100px 24px 60px; }
+      .hero-title { font-size: 42px; }
+      section { padding: 60px 24px; }
+      .story-grid { grid-template-columns: 1fr; gap: 40px; }
+      .tools-grid { grid-template-columns: 1fr; }
+      .audience-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 16px; text-align: center; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="nav-brand">
+      <span class="nav-brand-super">Perfusia</span>
+      <span class="nav-brand-name">HemoLab</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#tools">Tools</a></li>
+      <li><a href="#lessons">Lessons</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="https://github.com/perfusia/hemodynamics" target="_blank">GitHub</a></li>
+      <li><a href="./app/index.html" class="nav-cta">Open HemoLab →</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <div class="hero">
+    <p class="hero-label">Free · Open · Clinical Education</p>
+    <h1 class="hero-title">
+      Understand hemodynamics.<br />
+      <em>Not just memorize it.</em>
+    </h1>
+    <p class="hero-sub">
+      HemoLab is an interactive simulator for nursing students, ICU nurses, and CRNA candidates. Every lesson teaches the concept first, then lets you manipulate the physiology in real time.
+    </p>
+    <div class="hero-actions">
+      <a href="/hemodynamics/lessons/1" class="btn-primary">Start Lesson 1 →</a>
+      <a href="#lessons" class="btn-secondary">See all lessons</a>
+    </div>
+
+    <!-- Live stats -->
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-label">MAP</div>
+        <div class="stat-value map-value" id="map-display">70<span>mmHg</span></div>
+        <div class="stat-status" id="map-status" style="color: #34d399;">Normal</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">CO · Cardiac Output</div>
+        <div class="stat-value" id="co-display">5.0<span>L/min</span></div>
+        <div class="stat-status" style="color: rgba(255,255,255,0.3);">HR × SV</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">SVR · Vascular Resistance</div>
+        <div class="stat-value" id="svr-display">1120<span>dyn·s/cm⁵</span></div>
+        <div class="stat-status" style="color: rgba(255,255,255,0.3);">Normal</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Equation</div>
+        <div style="font-family: var(--mono); font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 4px;">MAP = CO × SVR</div>
+        <div style="font-family: var(--mono); font-size: 11px; margin-top: 4px;" id="eq-display">
+          <span style="color: #93c5fd;">5.0</span>
+          <span style="color: rgba(255,255,255,0.3);"> × </span>
+          <span style="color: #c4b5fd;">1120</span>
+          <span style="color: rgba(255,255,255,0.3);"> ÷ 80 = </span>
+          <span style="color: #34d399;" id="eq-result">70</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- Story / About -->
+  <section id="about">
+    <div class="story-grid">
+      <div>
+        <p class="section-label">The Story</p>
+        <h2 class="section-title reveal">Built by a learner,<br />for learners.</h2>
+        <blockquote class="story-quote reveal">
+          "I'm a senior software engineer transitioning into nursing school with the goal of becoming a CRNA. I built HemoLab to learn hemodynamics the way I learn everything else — by building something."
+        </blockquote>
+        <p class="story-attr reveal">— James Waller, Software Engineer → Nursing Student → Future CRNA</p>
+      </div>
+      <div class="reveal">
+        <p class="section-body" style="margin-bottom: 20px;">
+          Most clinical education tools are locked behind institutional licenses, built by committees, and designed to assess rather than teach. HemoLab is different: it's free, open source, and built by someone who is actively learning the same material.
+        </p>
+        <p class="section-body" style="margin-bottom: 20px;">
+          Every lesson teaches the concept in plain language first — no assumed knowledge, no glossary required. Then the simulation makes it tangible. You read about MAP = CO × SVR and the equation responds to your input as you read. You load a septic shock scenario and watch MAP collapse as SVR crashes. You apply norepinephrine and watch it recover.
+        </p>
+        <p class="section-body">
+          The lesson and the simulation are inseparable. That's the whole idea.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- Who it's for -->
+  <section>
+    <p class="section-label reveal">Who it's for</p>
+    <h2 class="section-title reveal">Built for three audiences.<br />Free for all of them.</h2>
+    <div class="audience-grid">
+      <div class="audience-card reveal">
+        <div class="audience-icon">Nursing Students</div>
+        <h3 class="audience-title">Learning the foundations</h3>
+        <p class="audience-body">Taking A&P for the first time? HemoLab explains hemodynamics the way a good textbook module does — every term defined in context, no external glossary, concepts built on each other. The simulator makes the equations real.</p>
+      </div>
+      <div class="audience-card reveal">
+        <div class="audience-icon">ICU Nurses</div>
+        <h3 class="audience-title">Deepening clinical reasoning</h3>
+        <p class="audience-body">You see the numbers on the monitor every shift. HemoLab helps you understand the relationships behind them — why MAP drops in sepsis even when CO is high, when fluid helps and when it doesn't, what each vasoactive drug is actually doing.</p>
+      </div>
+      <div class="audience-card reveal">
+        <div class="audience-icon">CRNA Candidates</div>
+        <h3 class="audience-title">Thinking like an anesthetist</h3>
+        <p class="audience-body">Hemodynamic management is the core of anesthesia practice. HemoLab builds the foundation — MAP, cardiac output, the Frank-Starling curve, drug mechanisms — so you arrive at CRNA school with more than memorized facts.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- Tools -->
+  <section id="tools">
+    <p class="section-label reveal">The Platform</p>
+    <h2 class="section-title reveal">HemoLab is the first tool<br />in the Perfusia suite.</h2>
+    <p class="section-body reveal" style="margin-bottom: 0;">
+      Perfusia is an open platform for clinical education. Every tool is free. Every lesson is integrated with simulation. Built by a learner, maintained in the open.
+    </p>
+    <div class="tools-grid">
+      <a href="/hemodynamics/lessons/1" class="tool-card available reveal">
+        <span class="tool-status live">Live</span>
+        <div class="tool-name">HemoLab</div>
+        <p class="tool-desc">Interactive hemodynamics simulator. MAP, cardiac output, Frank-Starling curve, vasoactive drugs, clinical scenarios.</p>
+        <div class="tool-lessons">2 lessons available · 4 planned</div>
+      </a>
+      <div class="tool-card planned reveal">
+        <span class="tool-status soon">Coming Soon</span>
+        <div class="tool-name">ShockLab</div>
+        <p class="tool-desc">Differentiate distributive, cardiogenic, obstructive, and hypovolemic shock using hemodynamic profiles. Decision-making under pressure.</p>
+        <div class="tool-lessons">Planned · Q4 2025</div>
+      </div>
+      <div class="tool-card planned reveal">
+        <span class="tool-status soon">Coming Soon</span>
+        <div class="tool-name">PharmSim</div>
+        <p class="tool-desc">Drug mechanism visualizer. See how vasopressors, inotropes, and anesthetic agents interact at the receptor level with live hemodynamic consequences.</p>
+        <div class="tool-lessons">Planned · 2026</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- Lessons -->
+  <section id="lessons">
+    <p class="section-label reveal">HemoLab Curriculum</p>
+    <h2 class="section-title reveal">Six lessons.<br />One complete picture.</h2>
+    <p class="section-body reveal">Each lesson teaches the concept first, then builds it into the simulator. By the end, you understand every equation running under the hood.</p>
+
+    <div class="lessons-list reveal">
+      <a href="/hemodynamics/lessons/1" class="lesson-row available">
+        <span class="lesson-num">01</span>
+        <div class="lesson-info">
+          <div class="lesson-title">The Core Equation — MAP = CO × SVR</div>
+          <div class="lesson-sub">Mean arterial pressure, cardiac output, systemic vascular resistance. The master equation of hemodynamics and what it means clinically.</div>
+        </div>
+        <span class="lesson-tag live">Live</span>
+        <span class="lesson-arrow">→</span>
+      </a>
+      <a href="/hemodynamics/lessons/2" class="lesson-row available">
+        <span class="lesson-num">02</span>
+        <div class="lesson-info">
+          <div class="lesson-title">Cardiac Output — HR × SV</div>
+          <div class="lesson-sub">Preload, afterload, contractility, and the Frank-Starling curve. Why fluid helps some patients and harms others.</div>
+        </div>
+        <span class="lesson-tag live">Live</span>
+        <span class="lesson-arrow">→</span>
+      </a>
+      <div class="lesson-row">
+        <span class="lesson-num">03</span>
+        <div class="lesson-info">
+          <div class="lesson-title">Vascular Resistance and Compensation</div>
+          <div class="lesson-sub">Baroreceptor reflex, sympathetic tone, and how the body compensates automatically for hemodynamic instability.</div>
+        </div>
+        <span class="lesson-tag soon">Soon</span>
+        <span class="lesson-arrow" style="opacity:0.3;">→</span>
+      </div>
+      <div class="lesson-row">
+        <span class="lesson-num">04</span>
+        <div class="lesson-info">
+          <div class="lesson-title">Preload and Volume Status</div>
+          <div class="lesson-sub">CVP, PCWP, fluid responsiveness, and the clinical question every ICU nurse faces: does this patient need fluid?</div>
+        </div>
+        <span class="lesson-tag soon">Soon</span>
+        <span class="lesson-arrow" style="opacity:0.3;">→</span>
+      </div>
+      <div class="lesson-row">
+        <span class="lesson-num">05</span>
+        <div class="lesson-info">
+          <div class="lesson-title">Drug Effects on Hemodynamics</div>
+          <div class="lesson-sub">Vasopressors, inotropes, and anesthetic agents in depth. Receptor mechanisms and hemodynamic consequences.</div>
+        </div>
+        <span class="lesson-tag soon">Soon</span>
+        <span class="lesson-arrow" style="opacity:0.3;">→</span>
+      </div>
+      <div class="lesson-row">
+        <span class="lesson-num">06</span>
+        <div class="lesson-info">
+          <div class="lesson-title">Clinical Scenarios</div>
+          <div class="lesson-sub">Septic shock, cardiogenic shock, anesthesia induction. Full scenario engine — make decisions, watch the patient respond.</div>
+        </div>
+        <span class="lesson-tag soon">Soon</span>
+        <span class="lesson-arrow" style="opacity:0.3;">→</span>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-brand">Perfusia · HemoLab · Open Source · Free Forever</div>
+    <div class="footer-links">
+      <a href="https://github.com/perfusia/hemodynamics" target="_blank">GitHub</a>
+      <a href="https://github.com/perfusia" target="_blank">Perfusia Org</a>
+      <a href="/hemodynamics/lessons/1">Launch App</a>
+    </div>
+  </footer>
+
+  <script>
+    // ── Scroll reveal ──
+    const reveals = document.querySelectorAll('.reveal')
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 60)
+          observer.unobserve(entry.target)
+        }
+      })
+    }, { threshold: 0.1 })
+    reveals.forEach(el => observer.observe(el))
+
+    // ── Animated MAP ticker ──
+    const states = [
+      { co: 5.0,  svr: 1120, label: 'Normal',    color: '#34d399' },
+      { co: 8.5,  svr: 380,  label: 'Dangerous',  color: '#f87171' },
+      { co: 1.8,  svr: 1900, label: 'Dangerous',  color: '#f87171' },
+      { co: 4.5,  svr: 580,  label: 'Low',        color: '#fbbf24' },
+      { co: 6.0,  svr: 2000, label: 'Crisis',     color: '#f87171' },
+      { co: 5.0,  svr: 1120, label: 'Normal',     color: '#34d399' },
+    ]
+
+    let idx = 0
+    const mapDisplay  = document.getElementById('map-display')
+    const mapStatus   = document.getElementById('map-status')
+    const coDisplay   = document.getElementById('co-display')
+    const svrDisplay  = document.getElementById('svr-display')
+    const eqDisplay   = document.getElementById('eq-display')
+    const eqResult    = document.getElementById('eq-result')
+
+    function animateTicker() {
+      idx = (idx + 1) % states.length
+      const s = states[idx]
+      const map = Math.round((s.co * s.svr) / 80)
+
+      mapDisplay.innerHTML  = `${map}<span>mmHg</span>`
+      mapDisplay.style.color = s.color
+      mapStatus.textContent  = s.label
+      mapStatus.style.color  = s.color
+      coDisplay.innerHTML    = `${s.co}<span>L/min</span>`
+      svrDisplay.innerHTML   = `${s.svr}<span>dyn·s/cm⁵</span>`
+      eqDisplay.innerHTML    = `<span style="color:#93c5fd">${s.co}</span><span style="color:rgba(255,255,255,0.3)"> × </span><span style="color:#c4b5fd">${s.svr}</span><span style="color:rgba(255,255,255,0.3)"> ÷ 80 = </span><span style="color:${s.color}" id="eq-result">${map}</span>`
+    }
+
+    setInterval(animateTicker, 3000)
+  </script>
+
+</body>
 </html>
