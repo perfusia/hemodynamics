@@ -1,5 +1,7 @@
 import type { Lesson2Scenario } from '../../shared/types'
 
+export { TAG_COLOR } from '../../shared/tokens'
+
 export const SCENARIOS: Lesson2Scenario[] = [
   {
     label: 'Normal at Rest',
@@ -32,9 +34,3 @@ export const SCENARIOS: Lesson2Scenario[] = [
     desc: 'IV fluid given to a hypovolemic patient. Preload increases, moving up the steep ascending limb of the curve. SV and CO improve.',
   },
 ]
-
-export const TAG_COLOR: Record<string, { text: string; bg: string; border: string }> = {
-  baseline: { text: '#34d399', bg: 'rgba(52,211,153,0.1)',   border: 'rgba(52,211,153,0.2)'  },
-  critical:  { text: '#f87171', bg: 'rgba(248,113,113,0.1)', border: 'rgba(248,113,113,0.2)' },
-  caution:   { text: '#fbbf24', bg: 'rgba(251,191,36,0.1)',  border: 'rgba(251,191,36,0.2)'  },
-}

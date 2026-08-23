@@ -1,4 +1,5 @@
 import type { MAPStatus, RangeState, FrankStarlingPoint } from './types'
+import { STATUS } from './tokens'
 
 /**
  * Calculate Mean Arterial Pressure from Cardiac Output and SVR.
@@ -60,23 +61,28 @@ export function frankStarlingCurve(
 /**
  * Clinical severity status for a MAP value.
  * Critical threshold: MAP < 65 mmHg — organ perfusion at risk.
+ *
+ * Colours come from the severity ramp in tokens.ts. No hex literals here.
  */
 export function getMAPStatus(map: number): MAPStatus {
-  if (map < 50)   return { label: 'Critical',  sub: 'Severe hypoperfusion',       accent: '#ef4444', ring: '#ef4444', bg: 'rgba(239,68,68,0.06)'   }
-  if (map < 65)   return { label: 'Dangerous', sub: 'Below perfusion threshold',  accent: '#f87171', ring: '#f87171', bg: 'rgba(248,113,113,0.06)' }
-  if (map < 70)   return { label: 'Low',       sub: 'Monitor closely',            accent: '#fbbf24', ring: '#fbbf24', bg: 'rgba(251,191,36,0.06)'  }
-  if (map <= 100) return { label: 'Normal',    sub: 'Organs adequately perfused', accent: '#34d399', ring: '#34d399', bg: 'rgba(52,211,153,0.06)'  }
-  if (map <= 120) return { label: 'Elevated',  sub: 'Sustained hypertension',     accent: '#fbbf24', ring: '#fbbf24', bg: 'rgba(251,191,36,0.06)'  }
-  return                 { label: 'Crisis',    sub: 'Hypertensive emergency',     accent: '#ef4444', ring: '#ef4444', bg: 'rgba(239,68,68,0.06)'   }
+  const mk = (label: string, sub: string, accent: string, tint: string): MAPStatus =>
+    ({ label, sub, accent, ring: accent, bg: tint })
+
+  if (map < 50)   return mk('Critical',  'Severe hypoperfusion',      STATUS.critical, 'rgba(163,35,25,0.07)')
+  if (map < 65)   return mk('Dangerous', 'Below perfusion threshold', STATUS.critical, 'rgba(163,35,25,0.05)')
+  if (map < 70)   return mk('Low',       'Monitor closely',           STATUS.warn,     'rgba(150,89,10,0.06)')
+  if (map <= 100) return mk('Normal',    'Organs adequately perfused',STATUS.normal,   'rgba(46,107,79,0.06)')
+  if (map <= 120) return mk('Elevated',  'Sustained hypertension',    STATUS.warn,     'rgba(150,89,10,0.06)')
+  return                 mk('Crisis',    'Hypertensive emergency',    STATUS.critical, 'rgba(163,35,25,0.07)')
 }
 
 /**
- * Range state and color for any hemodynamic variable.
+ * Range state and colour for any hemodynamic variable.
  */
 export function getRangeState(value: number, low: number, high: number): RangeState {
-  if (value < low)  return { label: 'Low',    color: '#fbbf24' }
-  if (value > high) return { label: 'High',   color: '#fbbf24' }
-  return                   { label: 'Normal', color: '#34d399' }
+  if (value < low)  return { label: 'Low',    color: STATUS.warn   }
+  if (value > high) return { label: 'High',   color: STATUS.warn   }
+  return                   { label: 'Normal', color: STATUS.normal }
 }
 
 export function clampCO(co: number):   number { return Math.min(Math.max(parseFloat(co.toFixed(1)), 1), 12) }

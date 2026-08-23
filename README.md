@@ -1,105 +1,75 @@
 # HemoLab
 
-**An interactive hemodynamics simulator built as a self-directed learning project during a career transition from software engineering to nursing and CRNA practice.**
+Free, open interactive hemodynamics lessons for nursing students, ICU nurses,
+and CCRN candidates. Each lesson teaches the concept in prose first, then lets
+you manipulate the physiology and watch the numbers respond.
 
-Live at: [perfusia.github.io/hemodynamics](https://perfusia.github.io/hemodynamics)
-
----
-
-## What it is
-
-HemoLab is a browser-based hemodynamics simulator designed for nursing students, ICU nurses, and CRNA candidates who want to understand the physiological relationships that drive blood pressure — not just memorize numbers.
-
-The core idea: every lesson teaches a concept first, then makes it interactive. You read about MAP = CO × SVR, and the equation is right there responding to your input as you read. You load a septic shock scenario and watch MAP collapse as SVR crashes. You apply norepinephrine and watch it recover. The lesson and the simulation are inseparable.
-
----
-
-## Why I built this
-
-I'm a senior Android/software engineer at DoorDash transitioning into nursing with the goal of becoming a Certified Registered Nurse Anesthetist (CRNA). I'm currently completing A&P prerequisites for an accelerated BSN program.
-
-Hemodynamics is foundational to everything a CRNA does — every drug decision, every induction, every crisis response traces back to MAP = CO × SVR. I built HemoLab to learn it deeply, not just well enough to pass an exam. The simulator forced me to understand every equation, every drug mechanism, and every clinical scenario well enough to implement it correctly.
-
-The project is part of a larger platform called [Perfusia](https://github.com/perfusia) — a suite of free, open clinical education tools for advanced nursing practice.
-
----
+**Live:** https://perfusia.github.io/hemodynamics
 
 ## Lessons
 
-### Lesson 1 — MAP = CO × SVR (complete)
+| # | Title | Status |
+|---|---|---|
+| 1 | The Core Equation — MAP = CO × SVR | Live |
+| 2 | Cardiac Output — HR × SV and the Frank-Starling curve | Live |
+| 3 | Vascular Resistance and Compensation | Planned |
+| 4 | Preload and Volume Status | Planned |
+| 5 | Drug Effects on Hemodynamics | Planned |
+| 6 | Clinical Scenarios | Planned |
 
-The master equation of hemodynamics. Mean Arterial Pressure is the product of Cardiac Output and Systemic Vascular Resistance.
+## How the physiology is modelled
 
-**What you can do:**
-- Adjust CO and SVR with zoned sliders that show normal ranges visually
-- Watch MAP recalculate in real time with clinical severity color coding
-- Load clinical scenarios: normal baseline, septic shock, cardiogenic shock, propofol induction, hypertensive crisis
-- Apply vasoactive drugs (norepinephrine, phenylephrine, vasopressin, dobutamine, epinephrine, propofol, nitroprusside) and observe how each shifts CO and SVR based on its receptor mechanism
+Everything is computed from equations rather than lookup tables, so the
+simulator responds correctly to inputs the author never anticipated. See
+`src/shared/utils.ts`.
 
-### Lesson 2 — Cardiac Output: HR × SV *(coming soon)*
+- **MAP** — `MAP = (CO × SVR) / 80`
+- **Stroke volume** — a Frank-Starling curve of the form `SV ∝ 2.5p / (1 + 2p²)`,
+  which rises steeply, plateaus, and falls at extreme preload where the
+  ventricle is over-distended. Contractility scales the whole curve; afterload
+  reduces ejection through `1 / (0.5 + 0.5·afterload)`.
+- **Drug effects** are applied as deltas to CO and SVR derived from each agent's
+  receptor profile, not as arbitrary numbers.
 
-Preload, afterload, contractility, and the Frank-Starling curve.
+## Design system
 
-### Lesson 3 — Vascular Resistance and Compensation *(planned)*
+Three colour layers, each taken from a standard that already exists in the
+critical care environment. Tokens live in `src/index.css` (`@theme`) and are
+mirrored for JavaScript in `src/shared/tokens.ts`. Those two files are the only
+places a hex literal belongs.
 
-Baroreceptor reflex, sympathetic tone, and how the body compensates for hemodynamic instability.
-
-### Lesson 4 — Preload and Volume Status *(planned)*
-
-CVP, fluid responsiveness, and when to give fluid versus pressors.
-
-### Lesson 5 — Drug Effects on Hemodynamics *(planned)*
-
-Vasopressors, inotropes, and anesthetic agents in depth.
-
-### Lesson 6 — Clinical Scenarios *(planned)*
-
-Septic shock, cardiogenic shock, obstructive shock, and anesthesia induction — full scenario engine with decision-making.
-
----
-
-## Tech stack
-
-- React + TypeScript
-- Vite
-- Tailwind CSS
-- Hosted on GitHub Pages
-
----
-
-## Project structure
-
-```
-src/
-  components/       React components
-  data/             Drug and scenario data
-  types/            TypeScript interfaces
-  utils/            Hemodynamic equations and helpers
-```
-
----
+| Layer | Used for | Source |
+|---|---|---|
+| Chart stock | Reading surface | Paper flowsheet stock |
+| Monitor | Measured haemodynamic parameters only | Bedside monitor channel convention: arterial red, ECG green, PA yellow, CVP blue, SpO₂ cyan |
+| ISO 26825 | Drug identity | International anaesthetic syringe label standard |
 
 ## Clinical accuracy
 
-Every equation, normal range, and drug effect in this simulator is sourced from standard references:
+Equations, normal ranges, and drug effects are referenced against Guyton and
+Hall *Textbook of Medical Physiology*, Miller's *Anesthesia*, Goodman & Gilman's
+*The Pharmacological Basis of Therapeutics*, and the Surviving Sepsis Campaign
+guidelines.
 
-- Guyton and Hall *Textbook of Medical Physiology* (14th ed.)
-- Miller's *Anesthesia* (9th ed.)
-- Goodman & Gilman's *Pharmacological Basis of Therapeutics* (13th ed.)
-- Surviving Sepsis Campaign guidelines
+Drug responses are educational approximations. Real responses vary with dose,
+patient physiology, and context. **This tool is for learning. It is not for
+clinical decision-making.**
 
-Drug effects are representative educational approximations. Real clinical responses vary by dose, patient physiology, and context. This tool is for learning, not clinical decision-making.
+Corrections are welcome. Open an issue.
 
----
+## Development
 
-## Part of Perfusia
+```bash
+npm install
+npm run dev        # local dev server
+npm run build      # typecheck and production build
+npm run lint
+```
 
-HemoLab is the first tool in the [Perfusia](https://github.com/perfusia) open clinical education platform. Planned tools include PharmSim (drug mechanism visualizer), VentSim (mechanical ventilation), and ShockLab (shock state differentiation).
+Pushing to `main` runs typecheck, lint, and build, then deploys to GitHub Pages
+via `.github/workflows/deploy.yml`. Do not deploy by hand — the workflow is the
+only path to production, so the source and the live site cannot drift apart.
 
-All tools are and will remain free and open source.
+## Licence
 
----
-
-## License
-
-MIT
+MIT.

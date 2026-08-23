@@ -1,12 +1,96 @@
 @import "tailwindcss";
 
+/* ============================================================================
+   HemoLab design tokens
+   ----------------------------------------------------------------------------
+   Three colour layers, each borrowed from a standard that already exists in
+   the critical care environment. No colour in this system is a taste decision.
+
+     Layer 1  CHART STOCK   the reading surface. Pale institutional green-grey,
+                            the colour of a paper flowsheet.
+     Layer 2  MONITOR       measured haemodynamic parameters only. Follows the
+                            bedside monitor channel convention: arterial red,
+                            ECG green, PA yellow, CVP blue, SpO2 cyan.
+     Layer 3  ISO 26825     drug identity. The international syringe-label
+                            colour standard used in anaesthesia and critical
+                            care. Vasopressors are violet, induction agents
+                            yellow, and so on.
+
+   Rule: monitor colours are reserved for measured values. Never use --color-art
+   for a generic error state, or the encoding stops meaning anything.
+   ========================================================================= */
+
+@theme {
+  /* --- Layer 1 - chart stock -------------------------------------------- */
+  --color-paper:      #F4F6F2;
+  --color-panel:      #E9EEE7;
+  --color-panel-alt:  #FFFFFF;
+  --color-rule:       #C7D2C4;
+  --color-ink:        #16211C;
+  --color-ink-soft:   #5A665C;
+  --color-ink-faint:  #8C968D;
+  --color-navy:       #1B3A4B;
+
+  /* --- Layer 2 - bedside monitor ---------------------------------------- */
+  --color-mon-bg:     #0B0E10;
+  --color-mon-grid:   #1B2124;
+  --color-mon-label:  #7D888C;
+  --color-art:        #FF453A;
+  --color-ecg:        #3DDC5C;
+  --color-pa:         #FFD60A;
+  --color-cvp:        #4DA3FF;
+  --color-spo2:       #5AC8E8;
+
+  /* --- Layer 3 - ISO 26825 syringe label --------------------------------- */
+  --color-iso-pressor:        #A05EB5;
+  --color-iso-hypotensive:    #A05EB5;
+  --color-iso-induction:      #F2C500;
+  --color-iso-opioid:         #64B5F6;
+  --color-iso-relaxant:       #FF5252;
+  --color-iso-anticholinergic:#4CAF50;
+  --color-iso-local:          #9E9E9E;
+
+  /* --- Clinical severity, tuned for the light surface -------------------- */
+  --color-status-critical: #A32319;
+  --color-status-warn:     #96590A;
+  --color-status-normal:   #2E6B4F;
+
+  /* --- Clinical severity, tuned for the dark monitor panel --------------- */
+  --color-status-critical-mon: #FF6B60;
+  --color-status-warn-mon:     #FFC44D;
+  --color-status-normal-mon:   #4ADE80;
+
+  /* --- Type -------------------------------------------------------------- */
+  --font-display: "Spectral", Georgia, "Times New Roman", serif;
+  --font-sans:    "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --font-mono:    "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
 html, body, #root {
-  background-color: #09090f;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
   min-height: 100vh;
   margin: 0;
   padding: 0;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
 
-* {
-  box-sizing: border-box;
+* { box-sizing: border-box; }
+
+/* Every numeric readout uses tabular figures so digits do not shift width
+   while a slider is being dragged. */
+.tnum { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+
+/* Keyboard focus must stay visible. */
+:focus-visible {
+  outline: 2px solid var(--color-navy);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

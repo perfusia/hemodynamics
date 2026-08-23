@@ -1,13 +1,56 @@
 import type { Drug, Lesson1Scenario } from '../../shared/types'
 
+export { TAG_COLOR } from '../../shared/tokens'
+
 export const DRUGS: Drug[] = [
-  { name: 'Norepinephrine', class: 'Vasopressor',          mechanism: 'α1 + mild β1 — constricts vessels, raises SVR. Maintains CO.',                      effect: { co:  0.0, svr: +350 }, indication: 'First-line vasopressor in septic shock'    },
-  { name: 'Phenylephrine',  class: 'Vasopressor',          mechanism: 'Pure α1 — raises SVR, no direct cardiac effect. Can reflexively slow HR.',          effect: { co: -0.5, svr: +400 }, indication: 'Anesthesia-induced hypotension'             },
-  { name: 'Vasopressin',    class: 'Vasopressor',          mechanism: 'V1 receptor — constricts vessels via non-adrenergic pathway.',                      effect: { co: -0.3, svr: +300 }, indication: 'Adjunct vasopressor in refractory shock'    },
-  { name: 'Dobutamine',     class: 'Inotrope',             mechanism: 'β1 agonist — increases myocardial contractility and HR, raising CO. Mild vasodilation.', effect: { co: +1.5, svr: -100 }, indication: 'Cardiogenic shock'                    },
-  { name: 'Epinephrine',    class: 'Vasopressor/Inotrope', mechanism: 'α1 + β1 + β2 — raises both CO and SVR. Broadest hemodynamic effect of any agent.',  effect: { co: +1.5, svr: +300 }, indication: 'Anaphylaxis, cardiac arrest'               },
-  { name: 'Propofol',       class: 'Anesthetic',           mechanism: 'GABA-A potentiator — vasodilation and mild myocardial depression. Drops SVR and CO.', effect: { co: -0.8, svr: -300 }, indication: 'IV induction — anticipate hypotension'    },
-  { name: 'Nitroprusside',  class: 'Vasodilator',          mechanism: 'Nitric oxide donor — dilates arteries and veins. Rapidly drops SVR and MAP.',        effect: { co: +0.5, svr: -500 }, indication: 'Hypertensive emergency, afterload reduction' },
+  {
+    name: 'Norepinephrine', class: 'Vasopressor',
+    mechanism: 'α1 with mild β1. Constricts vessels and raises SVR while largely maintaining CO.',
+    effect: { co: 0.0, svr: +350 },
+    indication: 'First-line vasopressor in septic shock',
+  },
+  {
+    name: 'Phenylephrine', class: 'Vasopressor',
+    mechanism: 'Pure α1. Raises SVR with no direct cardiac effect. Baroreceptor response can slow HR.',
+    effect: { co: -0.5, svr: +400 },
+    indication: 'Anesthesia-induced hypotension',
+  },
+  {
+    name: 'Vasopressin', class: 'Vasopressor',
+    mechanism: 'V1 receptor, non-adrenergic. Keeps working when catecholamine receptor coupling degrades in acidosis.',
+    effect: { co: -0.3, svr: +300 },
+    indication: 'Adjunct vasopressor in refractory shock',
+  },
+  {
+    name: 'Dobutamine', class: 'Inotrope',
+    mechanism: 'β1 agonist. Raises contractility and HR, lifting CO. Mild β2 vasodilation lowers SVR.',
+    effect: { co: +1.5, svr: -100 },
+    indication: 'Cardiogenic shock',
+  },
+  {
+    name: 'Milrinone', class: 'Inodilator',
+    mechanism: 'PDE3 inhibitor. Raises intracellular cAMP downstream of the β receptor, so it still works in a beta-blocked or downregulated ventricle. Dilates the systemic and pulmonary beds.',
+    effect: { co: +1.2, svr: -350 },
+    indication: 'Post-cardiotomy low output; renally cleared, so effect cannot be withdrawn quickly',
+  },
+  {
+    name: 'Epinephrine', class: 'Vasopressor/Inotrope',
+    mechanism: 'α1, β1 and β2. Raises both CO and SVR. Broadest hemodynamic effect of any single agent.',
+    effect: { co: +1.5, svr: +300 },
+    indication: 'Anaphylaxis, cardiac arrest, post-bypass low output',
+  },
+  {
+    name: 'Propofol', class: 'Anesthetic',
+    mechanism: 'GABA-A potentiation. Vasodilation plus mild myocardial depression drops both SVR and CO.',
+    effect: { co: -0.8, svr: -300 },
+    indication: 'IV induction — anticipate hypotension',
+  },
+  {
+    name: 'Nitroprusside', class: 'Vasodilator',
+    mechanism: 'Nitric oxide donor. Dilates arteries and veins, dropping SVR and MAP within seconds.',
+    effect: { co: +0.5, svr: -500 },
+    indication: 'Hypertensive emergency, afterload reduction',
+  },
 ]
 
 export const SCENARIOS: Lesson1Scenario[] = [
@@ -17,9 +60,3 @@ export const SCENARIOS: Lesson1Scenario[] = [
   { label: 'Propofol Induction',  co: 4.5, svr: 580,  tag: 'caution',  desc: 'Propofol causes vasodilation and mild myocardial depression.' },
   { label: 'Hypertensive Crisis', co: 6.0, svr: 2000, tag: 'critical', desc: 'Severe vasoconstriction drives MAP dangerously high.' },
 ]
-
-export const TAG_COLOR: Record<string, { text: string; bg: string; border: string }> = {
-  baseline: { text: '#34d399', bg: 'rgba(52,211,153,0.1)',   border: 'rgba(52,211,153,0.2)'  },
-  critical:  { text: '#f87171', bg: 'rgba(248,113,113,0.1)', border: 'rgba(248,113,113,0.2)' },
-  caution:   { text: '#fbbf24', bg: 'rgba(251,191,36,0.1)',  border: 'rgba(251,191,36,0.2)'  },
-}
