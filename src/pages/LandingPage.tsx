@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom'
 import { useBreakpoint } from '../shared/useBreakpoint'
 
 const TICKER_STATES = [
-  { co: 5.0,  svr: 1120, label: 'Normal',    color: '#2E6B4F' },
-  { co: 8.5,  svr: 380,  label: 'Dangerous', color: '#A32319' },
-  { co: 1.8,  svr: 1900, label: 'Dangerous', color: '#A32319' },
-  { co: 4.5,  svr: 580,  label: 'Low',       color: '#96590A' },
-  { co: 6.0,  svr: 2000, label: 'Crisis',    color: '#A32319' },
-  { co: 5.0,  svr: 1120, label: 'Normal',    color: '#2E6B4F' },
+  { co: 5.0,  svr: 1120, label: 'Normal',    color: '#4A6B57' },
+  { co: 8.5,  svr: 380,  label: 'Dangerous', color: '#9E3B26' },
+  { co: 1.8,  svr: 1900, label: 'Dangerous', color: '#9E3B26' },
+  { co: 4.5,  svr: 580,  label: 'Low',       color: '#8A6318' },
+  { co: 6.0,  svr: 2000, label: 'Crisis',    color: '#9E3B26' },
+  { co: 5.0,  svr: 1120, label: 'Normal',    color: '#4A6B57' },
 ]
 
 const LESSONS = [
@@ -45,7 +45,7 @@ export default function LandingPage() {
       if (statusRef.current) { statusRef.current.textContent = t.label; statusRef.current.style.color = t.color }
       if (coRef.current)     coRef.current.textContent = String(t.co)
       if (svrRef.current)    svrRef.current.textContent = String(t.svr)
-      if (eqRef.current)     eqRef.current.innerHTML = `<span style="color:#1B3A4B">${t.co}</span><span style="color:rgba(22,33,28,0.5)"> × </span><span style="color:#A05EB5">${t.svr}</span><span style="color:rgba(22,33,28,0.5)"> ÷ 80 = </span><span style="color:${t.color}">${map}</span>`
+      if (eqRef.current)     eqRef.current.innerHTML = `<span style="color:#2F4858">${t.co}</span><span style="color:rgba(43,33,24,0.5)"> × </span><span style="color:#6B4A63">${t.svr}</span><span style="color:rgba(43,33,24,0.5)"> ÷ 80 = </span><span style="color:${t.color}">${map}</span>`
     }, 3000)
 
     const reveals = document.querySelectorAll('.lp-reveal')
@@ -78,38 +78,38 @@ export default function LandingPage() {
   const px    = isMobile ? '20px' : isTablet ? '32px' : '48px'
 
   return (
-    <div style={{ background: '#F4F6F2', color: '#16211C', fontFamily: 'var(--font-sans)', fontWeight: 300, minHeight: '100vh', overflowX: 'hidden' }}>
+    <div style={{ background: '#F2EADB', color: '#2B2118', fontFamily: 'var(--font-sans)', fontWeight: 300, minHeight: '100vh', overflowX: 'hidden' }}>
 
       {/* ── Nav ── */}
       <nav style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: `0 ${px}`, height: 56,
-        borderBottom: '1px solid #C7D2C4',
-        background: 'rgba(244,246,242,0.92)', backdropFilter: 'blur(12px)',
+        borderBottom: '1px solid #D6C9AE',
+        background: 'rgba(242,234,219,0.92)', backdropFilter: 'blur(12px)',
       }}>
         <div>
-          <div style={{ fontSize: 9, fontFamily: mono, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#1B3A4B' }}>Perfusia</div>
-          <div style={{ fontSize: 15, fontWeight: 600, fontFamily: serif, color: '#16211C' }}>HemoLab</div>
+          <div style={{ fontSize: 9, fontFamily: mono, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#2F4858' }}>Perfusia</div>
+          <div style={{ fontSize: 15, fontWeight: 600, fontFamily: serif, color: '#2B2118' }}>HemoLab</div>
         </div>
 
         {isMobile ? (
           <>
             <Link to="/lessons/1" style={{
               fontFamily: mono, fontSize: 11, padding: '7px 14px', borderRadius: 6,
-              border: '1px solid rgba(46,107,79,0.3)', color: '#2E6B4F',
-              background: 'rgba(46,107,79,0.06)', textDecoration: 'none',
+              border: '1px solid rgba(74,107,87,0.3)', color: '#4A6B57',
+              background: 'rgba(74,107,87,0.06)', textDecoration: 'none',
             }}>Start →</Link>
           </>
         ) : (
           <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-            <a href="#about"   style={{ fontSize: 12, color: 'rgba(22,33,28,0.68)', textDecoration: 'none' }}>About</a>
-            <a href="#lessons" style={{ fontSize: 12, color: 'rgba(22,33,28,0.68)', textDecoration: 'none' }}>Lessons</a>
-            <a href="https://github.com/perfusia/hemodynamics" target="_blank" style={{ fontSize: 12, color: 'rgba(22,33,28,0.68)', textDecoration: 'none' }}>GitHub</a>
+            <a href="#about"   style={{ fontSize: 12, color: 'rgba(43,33,24,0.88)', textDecoration: 'none' }}>About</a>
+            <a href="#lessons" style={{ fontSize: 12, color: 'rgba(43,33,24,0.88)', textDecoration: 'none' }}>Lessons</a>
+            <a href="https://github.com/perfusia/hemodynamics" target="_blank" style={{ fontSize: 12, color: 'rgba(43,33,24,0.88)', textDecoration: 'none' }}>GitHub</a>
             <Link to="/lessons/1" style={{
               fontFamily: mono, fontSize: 11, padding: '8px 18px', borderRadius: 6,
-              border: '1px solid rgba(46,107,79,0.3)', color: '#2E6B4F',
-              background: 'rgba(46,107,79,0.06)', textDecoration: 'none',
+              border: '1px solid rgba(74,107,87,0.3)', color: '#4A6B57',
+              background: 'rgba(74,107,87,0.06)', textDecoration: 'none',
             }}>Open HemoLab →</Link>
           </div>
         )}
@@ -117,7 +117,7 @@ export default function LandingPage() {
 
       {/* ── Hero ── */}
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: `${isMobile ? '96px' : '120px'} ${px} ${isMobile ? '60px' : '80px'}` }}>
-        <p style={{ fontFamily: mono, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(46,107,79,0.6)', marginBottom: 20 }}>
+        <p style={{ fontFamily: mono, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(74,107,87,0.6)', marginBottom: 20 }}>
           Free · Open · Clinical Education
         </p>
         <h1 style={{
@@ -126,20 +126,20 @@ export default function LandingPage() {
           letterSpacing: '-0.02em', maxWidth: 760, margin: '0 0 24px',
         }}>
           Understand hemodynamics.<br />
-          <em style={{ fontStyle: 'italic', color: '#2E6B4F' }}>Not just memorize it.</em>
+          <em style={{ fontStyle: 'italic', color: '#4A6B57' }}>Not just memorize it.</em>
         </h1>
-        <p style={{ fontSize: isMobile ? 15 : 17, color: 'rgba(22,33,28,0.68)', maxWidth: 500, lineHeight: 1.75, margin: '0 0 36px' }}>
+        <p style={{ fontSize: isMobile ? 15 : 17, color: 'rgba(43,33,24,0.88)', maxWidth: 500, lineHeight: 1.75, margin: '0 0 36px' }}>
           A free interactive simulator for nursing students, ICU nurses, and CCRN candidates. Every lesson teaches the concept first, then lets you manipulate the physiology in real time.
         </p>
         <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 12, marginBottom: 52 }}>
           <Link to="/lessons/1" style={{
             fontFamily: mono, fontSize: 12, padding: '14px 28px', borderRadius: 8,
-            background: '#2E6B4F', color: '#E9EEE7', fontWeight: 500,
+            background: '#4A6B57', color: '#E8DFCB', fontWeight: 500,
             textDecoration: 'none', textAlign: 'center', display: 'block',
           }}>Start Lesson 1 →</Link>
           <a href="#lessons" style={{
             fontFamily: mono, fontSize: 12, padding: '14px 28px', borderRadius: 8,
-            border: '1px solid #C7D2C4', color: 'rgba(22,33,28,0.68)',
+            border: '1px solid #D6C9AE', color: 'rgba(43,33,24,0.88)',
             textDecoration: 'none', textAlign: 'center', display: 'block',
           }}>See all lessons</a>
         </div>
@@ -149,10 +149,10 @@ export default function LandingPage() {
           display: 'grid',
           gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(3, 1fr)',
           gap: 0,
-          border: '1px solid #C7D2C4',
+          border: '1px solid #D6C9AE',
           borderRadius: 12, overflow: 'hidden',
           maxWidth: isMobile ? '100%' : 580,
-          background: 'rgba(22,33,28,0.020)',
+          background: 'rgba(43,33,24,0.020)',
         }}>
           {[
             {
@@ -160,10 +160,10 @@ export default function LandingPage() {
               content: (
                 <>
                   <div style={{ fontFamily: mono, fontSize: 22, fontWeight: 300 }}>
-                    <span ref={mapRef} style={{ color: '#2E6B4F', transition: 'color 0.4s' }}>70</span>
-                    <span style={{ fontSize: 11, color: 'rgba(22,33,28,0.55)', marginLeft: 3 }}>mmHg</span>
+                    <span ref={mapRef} style={{ color: '#4A6B57', transition: 'color 0.4s' }}>70</span>
+                    <span style={{ fontSize: 11, color: 'rgba(43,33,24,0.78)', marginLeft: 3 }}>mmHg</span>
                   </div>
-                  <div ref={statusRef} style={{ fontSize: 10, marginTop: 3, color: '#2E6B4F', transition: 'color 0.4s' }}>Normal</div>
+                  <div ref={statusRef} style={{ fontSize: 10, marginTop: 3, color: '#4A6B57', transition: 'color 0.4s' }}>Normal</div>
                 </>
               ),
             },
@@ -173,9 +173,9 @@ export default function LandingPage() {
                 <>
                   <div style={{ fontFamily: mono, fontSize: 22, fontWeight: 300 }}>
                     <span ref={coRef}>5.0</span>
-                    <span style={{ fontSize: 11, color: 'rgba(22,33,28,0.55)', marginLeft: 3 }}>L/min</span>
+                    <span style={{ fontSize: 11, color: 'rgba(43,33,24,0.78)', marginLeft: 3 }}>L/min</span>
                   </div>
-                  <div style={{ fontSize: 10, marginTop: 3, color: 'rgba(22,33,28,0.5)' }}>HR × SV</div>
+                  <div style={{ fontSize: 10, marginTop: 3, color: 'rgba(43,33,24,0.78)' }}>HR × SV</div>
                 </>
               ),
             },
@@ -184,37 +184,37 @@ export default function LandingPage() {
               content: (
                 <>
                   <div ref={eqRef} style={{ fontFamily: mono, fontSize: isMobile ? 10 : 12, marginTop: 2 }}>
-                    <span style={{ color: '#1B3A4B' }}>5.0</span>
-                    <span style={{ color: 'rgba(22,33,28,0.5)' }}> × </span>
-                    <span style={{ color: '#A05EB5' }}>1120</span>
-                    <span style={{ color: 'rgba(22,33,28,0.5)' }}> ÷ 80 = </span>
-                    <span style={{ color: '#2E6B4F' }}>70</span>
+                    <span style={{ color: '#2F4858' }}>5.0</span>
+                    <span style={{ color: 'rgba(43,33,24,0.78)' }}> × </span>
+                    <span style={{ color: '#6B4A63' }}>1120</span>
+                    <span style={{ color: 'rgba(43,33,24,0.78)' }}> ÷ 80 = </span>
+                    <span style={{ color: '#4A6B57' }}>70</span>
                   </div>
-                  <div style={{ fontSize: 10, marginTop: 5, color: 'rgba(22,33,28,0.44)' }}>MAP = CO × SVR ÷ 80</div>
+                  <div style={{ fontSize: 10, marginTop: 5, color: 'rgba(43,33,24,0.68)' }}>MAP = CO × SVR ÷ 80</div>
                 </>
               ),
             },
           ].map((item, i) => (
             <div key={i} style={{
               padding: '14px 16px',
-              borderRight: i < 2 && (!isMobile || i === 0) ? '1px solid #C7D2C4' : 'none',
-              borderBottom: isMobile && i < 2 ? '1px solid #C7D2C4' : 'none',
+              borderRight: i < 2 && (!isMobile || i === 0) ? '1px solid #D6C9AE' : 'none',
+              borderBottom: isMobile && i < 2 ? '1px solid #D6C9AE' : 'none',
               gridColumn: isMobile && i === 2 ? '1 / -1' : 'auto',
             }}>
-              <div style={{ fontFamily: mono, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(22,33,28,0.44)', marginBottom: 6 }}>{item.label}</div>
+              <div style={{ fontFamily: mono, fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(43,33,24,0.68)', marginBottom: 6 }}>{item.label}</div>
               {item.content}
             </div>
           ))}
         </div>
       </div>
 
-      <hr style={{ border: 'none', borderTop: '1px solid #C7D2C4', maxWidth: 1200, margin: '0 auto' }} />
+      <hr style={{ border: 'none', borderTop: '1px solid #D6C9AE', maxWidth: 1200, margin: '0 auto' }} />
 
       {/* ── About ── */}
       <section id="about" style={{ maxWidth: 1200, margin: '0 auto', padding: `80px ${px}` }}>
         <div style={{ display: 'grid', gridTemplateColumns: isMobile || isTablet ? '1fr' : '1fr 1fr', gap: isMobile ? 40 : 80, alignItems: 'center' }}>
           <div>
-            <p className="lp-reveal" style={{ ...reveal, fontFamily: mono, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(22,33,28,0.44)', marginBottom: 14 }}>The Story</p>
+            <p className="lp-reveal" style={{ ...reveal, fontFamily: mono, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(43,33,24,0.68)', marginBottom: 14 }}>The Story</p>
             <h2 className="lp-reveal" style={{ ...reveal, fontFamily: serif, fontSize: isMobile ? 28 : 40, fontWeight: 400, lineHeight: 1.15, letterSpacing: '-0.01em', marginBottom: 20 }}>
               Built by a learner,<br />for learners.
             </h2>
@@ -222,13 +222,13 @@ export default function LandingPage() {
               ...reveal,
               fontFamily: serif, fontSize: isMobile ? 16 : 20,
               fontStyle: 'italic', lineHeight: 1.5,
-              color: 'rgba(22,33,28,0.88)',
-              borderLeft: '2px solid #2E6B4F',
+              color: '#2B2118',
+              borderLeft: '2px solid #4A6B57',
               paddingLeft: 20, margin: '0 0 16px',
             }}>
               "HemoLab is built and maintained by James Waller, a nursing student at Elmhurst University. It exists because hemodynamics is taught as a set of numbers to memorise when it is really a small system of equations you can reason your way through."
             </blockquote>
-            <p className="lp-reveal" style={{ ...reveal, fontFamily: mono, fontSize: 11, color: 'rgba(22,33,28,0.44)', letterSpacing: '0.04em' }}>
+            <p className="lp-reveal" style={{ ...reveal, fontFamily: mono, fontSize: 11, color: 'rgba(43,33,24,0.68)', letterSpacing: '0.04em' }}>
               — James Waller, Software Engineer → Nursing Student → Future CRNA
             </p>
           </div>
@@ -238,17 +238,17 @@ export default function LandingPage() {
               'Every lesson teaches the concept in plain language first — no assumed knowledge, no glossary required. Then the simulation makes it tangible.',
               'The lesson and the simulation are inseparable. That\'s the whole idea.',
             ].map((text, i) => (
-              <p key={i} className="lp-reveal" style={{ ...reveal, fontSize: 15, color: 'rgba(22,33,28,0.66)', lineHeight: 1.75, marginBottom: 16 }}>{text}</p>
+              <p key={i} className="lp-reveal" style={{ ...reveal, fontSize: 15, color: 'rgba(43,33,24,0.88)', lineHeight: 1.75, marginBottom: 16 }}>{text}</p>
             ))}
           </div>
         </div>
       </section>
 
-      <hr style={{ border: 'none', borderTop: '1px solid #C7D2C4', maxWidth: 1200, margin: '0 auto' }} />
+      <hr style={{ border: 'none', borderTop: '1px solid #D6C9AE', maxWidth: 1200, margin: '0 auto' }} />
 
       {/* ── Audience ── */}
       <section style={{ maxWidth: 1200, margin: '0 auto', padding: `80px ${px}` }}>
-        <p className="lp-reveal" style={{ ...reveal, fontFamily: mono, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(22,33,28,0.44)', marginBottom: 14 }}>Who it's for</p>
+        <p className="lp-reveal" style={{ ...reveal, fontFamily: mono, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(43,33,24,0.68)', marginBottom: 14 }}>Who it's for</p>
         <h2 className="lp-reveal" style={{ ...reveal, fontFamily: serif, fontSize: isMobile ? 28 : 40, fontWeight: 400, lineHeight: 1.15, letterSpacing: '-0.01em', marginBottom: 40 }}>
           Three audiences.<br />Free for all of them.
         </h2>
@@ -258,51 +258,51 @@ export default function LandingPage() {
             { icon: 'ICU Nurses',        title: 'Deepening clinical reasoning',  body: 'You see the numbers every shift. HemoLab helps you understand the relationships behind them — why MAP drops in sepsis even when CO is high.' },
             { icon: 'CRNA Candidates',   title: 'Thinking like an anesthetist',  body: 'Hemodynamic management is the core of anesthesia practice. HemoLab builds the foundation before you need it in school.' },
           ].map(a => (
-            <div key={a.icon} className="lp-reveal" style={{ ...reveal, border: '1px solid #C7D2C4', borderRadius: 14, padding: '24px 20px', background: 'rgba(22,33,28,0.025)' }}>
-              <div style={{ fontFamily: mono, fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#2E6B4F', marginBottom: 12 }}>{a.icon}</div>
+            <div key={a.icon} className="lp-reveal" style={{ ...reveal, border: '1px solid #D6C9AE', borderRadius: 14, padding: '24px 20px', background: 'rgba(43,33,24,0.025)' }}>
+              <div style={{ fontFamily: mono, fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#4A6B57', marginBottom: 12 }}>{a.icon}</div>
               <h3 style={{ fontFamily: serif, fontSize: 18, fontWeight: 400, marginBottom: 10, lineHeight: 1.3 }}>{a.title}</h3>
-              <p style={{ fontSize: 13, color: 'rgba(22,33,28,0.63)', lineHeight: 1.7, margin: 0 }}>{a.body}</p>
+              <p style={{ fontSize: 13, color: 'rgba(43,33,24,0.78)', lineHeight: 1.7, margin: 0 }}>{a.body}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <hr style={{ border: 'none', borderTop: '1px solid #C7D2C4', maxWidth: 1200, margin: '0 auto' }} />
+      <hr style={{ border: 'none', borderTop: '1px solid #D6C9AE', maxWidth: 1200, margin: '0 auto' }} />
 
       {/* ── Lessons ── */}
       <section id="lessons" style={{ maxWidth: 1200, margin: '0 auto', padding: `80px ${px}` }}>
-        <p className="lp-reveal" style={{ ...reveal, fontFamily: mono, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(22,33,28,0.44)', marginBottom: 14 }}>HemoLab Curriculum</p>
+        <p className="lp-reveal" style={{ ...reveal, fontFamily: mono, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(43,33,24,0.68)', marginBottom: 14 }}>HemoLab Curriculum</p>
         <h2 className="lp-reveal" style={{ ...reveal, fontFamily: serif, fontSize: isMobile ? 28 : 40, fontWeight: 400, lineHeight: 1.15, letterSpacing: '-0.01em', marginBottom: 16 }}>
           Six lessons.<br />One complete picture.
         </h2>
-        <p className="lp-reveal" style={{ ...reveal, fontSize: 15, color: 'rgba(22,33,28,0.66)', lineHeight: 1.75, maxWidth: 500, marginBottom: 36 }}>
+        <p className="lp-reveal" style={{ ...reveal, fontSize: 15, color: 'rgba(43,33,24,0.88)', lineHeight: 1.75, maxWidth: 500, marginBottom: 36 }}>
           Each lesson teaches the concept first, then builds it into the simulator.
         </p>
-        <div className="lp-reveal" style={{ ...reveal, border: '1px solid #C7D2C4', borderRadius: 14, overflow: 'hidden' }}>
+        <div className="lp-reveal" style={{ ...reveal, border: '1px solid #D6C9AE', borderRadius: 14, overflow: 'hidden' }}>
           {LESSONS.map((lesson, i) => {
             const rowContent = (
               <>
-                <span style={{ fontFamily: mono, fontSize: 11, color: 'rgba(22,33,28,0.44)', width: 22, flexShrink: 0 }}>{lesson.num}</span>
+                <span style={{ fontFamily: mono, fontSize: 11, color: 'rgba(43,33,24,0.68)', width: 22, flexShrink: 0 }}>{lesson.num}</span>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: isMobile ? 13 : 14, fontWeight: 400, color: lesson.live ? '#16211C' : 'rgba(22,33,28,0.42)', marginBottom: 2, whiteSpace: isMobile ? 'normal' : 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{lesson.title}</div>
-                  {!isMobile && <div style={{ fontSize: 12, color: 'rgba(22,33,28,0.58)' }}>{lesson.sub}</div>}
+                  <div style={{ fontSize: isMobile ? 13 : 14, fontWeight: 400, color: lesson.live ? '#2B2118' : 'rgba(43,33,24,0.42)', marginBottom: 2, whiteSpace: isMobile ? 'normal' : 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{lesson.title}</div>
+                  {!isMobile && <div style={{ fontSize: 12, color: 'rgba(43,33,24,0.78)' }}>{lesson.sub}</div>}
                 </div>
                 <span style={{
                   fontFamily: mono, fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase',
                   padding: '3px 8px', borderRadius: 99, flexShrink: 0,
                   ...(lesson.live
-                    ? { color: '#2E6B4F', background: 'rgba(46,107,79,0.08)', border: '1px solid rgba(46,107,79,0.15)' }
-                    : { color: 'rgba(22,33,28,0.44)', background: 'rgba(22,33,28,0.030)', border: '1px solid #C7D2C4' }
+                    ? { color: '#4A6B57', background: 'rgba(74,107,87,0.08)', border: '1px solid rgba(74,107,87,0.15)' }
+                    : { color: 'rgba(43,33,24,0.68)', background: 'rgba(43,33,24,0.030)', border: '1px solid #D6C9AE' }
                   ),
                 }}>{lesson.live ? 'Live' : 'Soon'}</span>
-                <span style={{ fontSize: 14, color: lesson.live ? 'rgba(22,33,28,0.58)' : 'rgba(22,33,28,0.26)', flexShrink: 0 }}>→</span>
+                <span style={{ fontSize: 14, color: lesson.live ? 'rgba(43,33,24,0.58)' : 'rgba(43,33,24,0.26)', flexShrink: 0 }}>→</span>
               </>
             )
 
             const rowStyle: React.CSSProperties = {
               display: 'flex', alignItems: 'center', gap: isMobile ? 12 : 20,
               padding: isMobile ? '14px 16px' : '18px 22px',
-              borderBottom: i < LESSONS.length - 1 ? '1px solid #C7D2C4' : 'none',
+              borderBottom: i < LESSONS.length - 1 ? '1px solid #D6C9AE' : 'none',
               textDecoration: 'none', color: 'inherit',
               background: 'transparent',
             }
@@ -316,7 +316,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <hr style={{ border: 'none', borderTop: '1px solid #C7D2C4', maxWidth: 1200, margin: '0 auto' }} />
+      <hr style={{ border: 'none', borderTop: '1px solid #D6C9AE', maxWidth: 1200, margin: '0 auto' }} />
 
       {/* ── Footer ── */}
       <footer style={{
@@ -328,13 +328,13 @@ export default function LandingPage() {
         alignItems: isMobile ? 'flex-start' : 'center',
         gap: 16,
       }}>
-        <div style={{ fontFamily: mono, fontSize: 11, color: 'rgba(22,33,28,0.44)' }}>
+        <div style={{ fontFamily: mono, fontSize: 11, color: 'rgba(43,33,24,0.68)' }}>
           Perfusia · HemoLab · Open Source · Free Forever
         </div>
         <div style={{ display: 'flex', gap: 20 }}>
-          <a href="https://github.com/perfusia/hemodynamics" target="_blank" style={{ fontSize: 12, color: 'rgba(22,33,28,0.44)', textDecoration: 'none' }}>GitHub</a>
-          <a href="https://github.com/perfusia" target="_blank" style={{ fontSize: 12, color: 'rgba(22,33,28,0.44)', textDecoration: 'none' }}>Perfusia</a>
-          <Link to="/lessons/1" style={{ fontSize: 12, color: 'rgba(22,33,28,0.44)', textDecoration: 'none' }}>Launch App</Link>
+          <a href="https://github.com/perfusia/hemodynamics" target="_blank" style={{ fontSize: 12, color: 'rgba(43,33,24,0.68)', textDecoration: 'none' }}>GitHub</a>
+          <a href="https://github.com/perfusia" target="_blank" style={{ fontSize: 12, color: 'rgba(43,33,24,0.68)', textDecoration: 'none' }}>Perfusia</a>
+          <Link to="/lessons/1" style={{ fontSize: 12, color: 'rgba(43,33,24,0.68)', textDecoration: 'none' }}>Launch App</Link>
         </div>
       </footer>
 

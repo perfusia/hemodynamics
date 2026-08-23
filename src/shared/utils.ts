@@ -68,12 +68,12 @@ export function getMAPStatus(map: number): MAPStatus {
   const mk = (label: string, sub: string, accent: string, tint: string): MAPStatus =>
     ({ label, sub, accent, ring: accent, bg: tint })
 
-  if (map < 50)   return mk('Critical',  'Severe hypoperfusion',      STATUS.critical, 'rgba(163,35,25,0.07)')
-  if (map < 65)   return mk('Dangerous', 'Below perfusion threshold', STATUS.critical, 'rgba(163,35,25,0.05)')
-  if (map < 70)   return mk('Low',       'Monitor closely',           STATUS.warn,     'rgba(150,89,10,0.06)')
-  if (map <= 100) return mk('Normal',    'Organs adequately perfused',STATUS.normal,   'rgba(46,107,79,0.06)')
-  if (map <= 120) return mk('Elevated',  'Sustained hypertension',    STATUS.warn,     'rgba(150,89,10,0.06)')
-  return                 mk('Crisis',    'Hypertensive emergency',    STATUS.critical, 'rgba(163,35,25,0.07)')
+  if (map < 50)   return mk('Critical',  'Severe hypoperfusion',      STATUS.critical, 'rgba(158,59,38,0.07)')
+  if (map < 65)   return mk('Dangerous', 'Below perfusion threshold', STATUS.critical, 'rgba(158,59,38,0.05)')
+  if (map < 70)   return mk('Low',       'Monitor closely',           STATUS.warn,     'rgba(138,99,24,0.06)')
+  if (map <= 100) return mk('Normal',    'Organs adequately perfused',STATUS.normal,   'rgba(74,107,87,0.06)')
+  if (map <= 120) return mk('Elevated',  'Sustained hypertension',    STATUS.warn,     'rgba(138,99,24,0.06)')
+  return                 mk('Crisis',    'Hypertensive emergency',    STATUS.critical, 'rgba(158,59,38,0.07)')
 }
 
 /**

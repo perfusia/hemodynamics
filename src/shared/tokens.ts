@@ -1,46 +1,52 @@
 /**
- * Typed mirror of the CSS custom properties defined in index.css.
+ * Typed mirror of the CSS custom properties in index.css.
  *
- * Most styling should use Tailwind utility classes generated from the @theme
- * block (bg-paper, text-ink, border-rule). This module exists for the places
- * that genuinely need a raw value in JavaScript: SVG stroke and fill
- * attributes, canvas drawing, and inline gradient stops.
+ * Prefer Tailwind utilities generated from the @theme block (bg-paper,
+ * text-ink, border-rule). Use this module only where a raw value is genuinely
+ * needed in JavaScript: SVG stroke and fill attributes, and computed tints.
  *
- * If you change a colour, change it in index.css first, then here. These two
- * files are the only places in the codebase where a hex literal may appear.
+ * These two files are the only places a hex literal belongs.
  */
 
-export const CHART = {
-  paper:     '#F4F6F2',
-  panel:     '#E9EEE7',
-  panelAlt:  '#FFFFFF',
-  rule:      '#C7D2C4',
-  ink:       '#16211C',
-  inkSoft:   '#5A665C',
-  inkFaint:  '#8C968D',
-  navy:      '#1B3A4B',
+/** Toned paper, three depths. */
+export const SURFACE = {
+  paper:  '#F2EADB',
+  raised: '#FAF6EC',
+  deep:   '#E8DFCB',
+  rule:   '#D6C9AE',
+  ruleStrong: '#B39F7C',
+} as const
+
+/** Iron-gall ink, three weights. */
+export const INK = {
+  base:  '#2B2118',
+  soft:  '#5C4E3E',
+  faint: '#6F5F45',
 } as const
 
 /**
- * Bedside monitor channel colours. Reserved for measured haemodynamic
- * parameters so that the encoding carries meaning. Do not reuse these for
- * generic UI states.
+ * Plate pigments. These carry meaning, not decoration.
+ * Sanguine is arterial. Indigo is flow. Plum is resistance.
  */
-export const MONITOR = {
-  bg:    '#0B0E10',
-  grid:  '#1B2124',
-  label: '#7D888C',
-  art:   '#FF453A',  // arterial pressure
-  ecg:   '#3DDC5C',  // ECG
-  pa:    '#FFD60A',  // pulmonary artery
-  cvp:   '#4DA3FF',  // central venous
-  spo2:  '#5AC8E8',  // pulse oximetry
+export const PIGMENT = {
+  sanguine:  '#9E3B26',
+  indigo:    '#2F4858',
+  plum:      '#6B4A63',
+  verdigris: '#4A6B57',
+  ochre:     '#8A6318',
+} as const
+
+/** Clinical severity ramp. */
+export const STATUS = {
+  critical: PIGMENT.sanguine,
+  warn:     PIGMENT.ochre,
+  normal:   PIGMENT.verdigris,
 } as const
 
 /**
  * ISO 26825 / ASTM D4774 anaesthetic syringe label colours.
- * Used to colour drug identity consistently with the labels a clinician
- * already reads on a syringe.
+ * Left at standard values deliberately — the point is fidelity to the label a
+ * clinician actually reads on the syringe.
  */
 export const ISO_26825 = {
   vasopressor:     '#A05EB5',
@@ -52,33 +58,26 @@ export const ISO_26825 = {
   localAnesthetic: '#9E9E9E',
 } as const
 
-/** Severity ramp for the light chart surface. */
-export const STATUS = {
-  critical: '#A32319',
-  warn:     '#96590A',
-  normal:   '#2E6B4F',
-} as const
-
-/** Severity ramp for the dark monitor panel, lifted for contrast. */
-export const STATUS_MON = {
-  critical: '#FF6B60',
-  warn:     '#FFC44D',
-  normal:   '#4ADE80',
-} as const
-
-/** Drug class to ISO colour. Single source of truth for drug swatches. */
 export const DRUG_CLASS_COLOR: Record<string, string> = {
-  'Vasopressor':           ISO_26825.vasopressor,
-  'Inotrope':              ISO_26825.vasopressor,
-  'Vasopressor/Inotrope':  ISO_26825.vasopressor,
-  'Inodilator':            ISO_26825.vasopressor,
-  'Vasodilator':           ISO_26825.hypotensive,
-  'Anesthetic':            ISO_26825.induction,
+  'Vasopressor':          ISO_26825.vasopressor,
+  'Inotrope':             ISO_26825.vasopressor,
+  'Vasopressor/Inotrope': ISO_26825.vasopressor,
+  'Inodilator':           ISO_26825.vasopressor,
+  'Vasodilator':          ISO_26825.hypotensive,
+  'Anesthetic':           ISO_26825.induction,
 }
 
-/** Scenario severity tag styling. Previously duplicated in both lesson data files. */
 export const TAG_COLOR: Record<'baseline' | 'caution' | 'critical', { text: string; bg: string; border: string }> = {
-  baseline: { text: STATUS.normal,   bg: 'rgba(46,107,79,0.09)',  border: 'rgba(46,107,79,0.22)'  },
-  caution:  { text: STATUS.warn,     bg: 'rgba(150,89,10,0.09)',  border: 'rgba(150,89,10,0.22)'  },
-  critical: { text: STATUS.critical, bg: 'rgba(163,35,25,0.08)',  border: 'rgba(163,35,25,0.22)'  },
+  baseline: { text: PIGMENT.verdigris, bg: 'rgba(74,107,87,0.10)',  border: 'rgba(74,107,87,0.30)'  },
+  caution:  { text: PIGMENT.ochre,     bg: 'rgba(138,99,24,0.10)',  border: 'rgba(138,99,24,0.30)'  },
+  critical: { text: PIGMENT.sanguine,  bg: 'rgba(158,59,38,0.09)',  border: 'rgba(158,59,38,0.28)'  },
 }
+
+/** Back-compat aliases so existing imports keep resolving during migration. */
+export const CHART = { paper: SURFACE.paper, panel: SURFACE.deep, panelAlt: SURFACE.raised,
+                       rule: SURFACE.rule, ink: INK.base, inkSoft: INK.soft,
+                       inkFaint: INK.faint, navy: PIGMENT.indigo } as const
+export const MONITOR = { bg: SURFACE.raised, grid: SURFACE.rule, label: INK.faint,
+                         art: PIGMENT.sanguine, ecg: PIGMENT.verdigris, pa: PIGMENT.plum,
+                         cvp: PIGMENT.indigo, spo2: PIGMENT.indigo } as const
+export const STATUS_MON = STATUS
