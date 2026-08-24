@@ -229,7 +229,7 @@ export default function LandingPage() {
               "HemoLab is built and maintained by James Waller, a nursing student at Elmhurst University. It exists because hemodynamics is taught as a set of numbers to memorise when it is really a small system of equations you can reason your way through."
             </blockquote>
             <p className="lp-reveal" style={{ ...reveal, fontFamily: mono, fontSize: 11, color: 'rgba(43,33,24,0.68)', letterSpacing: '0.04em' }}>
-              — James Waller, Software Engineer → Nursing Student → Future CRNA
+              — James Waller, Software Engineer → Nursing Student → Future Critical Care Nurse
             </p>
           </div>
           <div>
