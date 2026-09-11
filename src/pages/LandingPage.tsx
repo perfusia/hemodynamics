@@ -20,6 +20,13 @@ const LESSONS = [
   { num: '06', title: 'Clinical Scenarios',                   sub: 'Make decisions, watch the patient respond.',                                   path: null,         live: false },
 ]
 
+const REFERENCES = [
+  { authors: 'Hall JE, Hall ME.',            title: 'Guyton and Hall Textbook of Medical Physiology',        ed: '14th ed. Elsevier; 2021.' },
+  { authors: 'Gropper MA, ed.',              title: "Miller's Anesthesia",                                   ed: '9th ed. Elsevier; 2020.' },
+  { authors: 'Brunton LL, Knollmann BC, eds.', title: "Goodman & Gilman's The Pharmacological Basis of Therapeutics", ed: '14th ed. McGraw Hill; 2022.' },
+  { authors: 'Evans L, Rhodes A, Alhazzani W, et al.', title: 'Surviving Sepsis Campaign: International Guidelines for Management of Sepsis and Septic Shock 2021', ed: 'Crit Care Med. 2021;49(11):e1063–e1143.' },
+]
+
 export default function LandingPage() {
   const bp       = useBreakpoint()
   const isMobile = bp === 'mobile'
@@ -105,6 +112,7 @@ export default function LandingPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
             <a href="#about"   style={{ fontSize: 12, color: 'rgba(43,33,24,0.88)', textDecoration: 'none' }}>About</a>
             <a href="#lessons" style={{ fontSize: 12, color: 'rgba(43,33,24,0.88)', textDecoration: 'none' }}>Lessons</a>
+            <a href="#references" style={{ fontSize: 12, color: 'rgba(43,33,24,0.88)', textDecoration: 'none' }}>Sources</a>
             <a href="https://github.com/perfusia/hemodynamics" target="_blank" style={{ fontSize: 12, color: 'rgba(43,33,24,0.88)', textDecoration: 'none' }}>GitHub</a>
             <Link to="/lessons/1" style={{
               fontFamily: mono, fontSize: 11, padding: '8px 18px', borderRadius: 6,
@@ -318,6 +326,38 @@ export default function LandingPage() {
 
       <hr style={{ border: 'none', borderTop: '1px solid #D6C9AE', maxWidth: 1200, margin: '0 auto' }} />
 
+            {/* ── References ── */}
+      <section id="references" style={{ maxWidth: 1200, margin: '0 auto', padding: `80px ${px}` }}>
+        <p className="lp-reveal" style={{ ...reveal, fontFamily: mono, fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(43,33,24,0.68)', marginBottom: 14 }}>Sources</p>
+        <h2 className="lp-reveal" style={{ ...reveal, fontFamily: serif, fontSize: isMobile ? 28 : 40, fontWeight: 400, lineHeight: 1.15, letterSpacing: '-0.01em', marginBottom: 16 }}>
+          Referenced against<br />the standard texts.
+        </h2>
+        <p className="lp-reveal" style={{ ...reveal, fontSize: 15, color: 'rgba(43,33,24,0.88)', lineHeight: 1.75, maxWidth: 520, marginBottom: 36 }}>
+          Physiology, pharmacology, and clinical thresholds are checked against primary sources rather than summarised from secondary material. Content is also reviewed by practicing critical care nurses.
+        </p>
+
+        <div className="lp-reveal" style={{ ...reveal, border: '1px solid #D6C9AE', borderRadius: 14, overflow: 'hidden' }}>
+          {REFERENCES.map((ref, i) => (
+            <div key={ref.title} style={{
+              padding: isMobile ? '14px 16px' : '18px 22px',
+              borderBottom: i < REFERENCES.length - 1 ? '1px solid #D6C9AE' : 'none',
+            }}>
+              <div style={{ fontSize: isMobile ? 13 : 14, color: '#2B2118', lineHeight: 1.5, marginBottom: 3 }}>
+                <span style={{ color: 'rgba(43,33,24,0.78)' }}>{ref.authors} </span>
+                <em style={{ fontFamily: serif, fontStyle: 'italic' }}>{ref.title}</em>
+              </div>
+              <div style={{ fontFamily: mono, fontSize: 11, color: 'rgba(43,33,24,0.68)' }}>{ref.ed}</div>
+            </div>
+          ))}
+        </div>
+
+        <p className="lp-reveal" style={{ ...reveal, fontSize: 12, color: 'rgba(43,33,24,0.68)', lineHeight: 1.7, maxWidth: 520, marginTop: 24 }}>
+          HemoLab is an educational tool. The models are deliberately simplified to teach relationships between variables, and are not intended for clinical decision-making or patient care.
+        </p>
+      </section>
+
+      <hr style={{ border: 'none', borderTop: '1px solid #D6C9AE', maxWidth: 1200, margin: '0 auto' }} />
+
       {/* ── Footer ── */}
       <footer style={{
         maxWidth: 1200, margin: '0 auto',
@@ -332,6 +372,7 @@ export default function LandingPage() {
           Perfusia · HemoLab · Open Source · Free Forever
         </div>
         <div style={{ display: 'flex', gap: 20 }}>
+          <a href="#references" style={{ fontSize: 12, color: 'rgba(43,33,24,0.88)', textDecoration: 'none' }}>Sources</a>
           <a href="https://github.com/perfusia/hemodynamics" target="_blank" style={{ fontSize: 12, color: 'rgba(43,33,24,0.68)', textDecoration: 'none' }}>GitHub</a>
           <a href="https://github.com/perfusia" target="_blank" style={{ fontSize: 12, color: 'rgba(43,33,24,0.68)', textDecoration: 'none' }}>Perfusia</a>
           <Link to="/lessons/1" style={{ fontSize: 12, color: 'rgba(43,33,24,0.68)', textDecoration: 'none' }}>Launch App</Link>
