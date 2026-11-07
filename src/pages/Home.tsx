@@ -7,7 +7,7 @@ import { COMMON } from '../content/refs'
 import { HeroFigure } from './HeroFigure'
 
 const CITATION =
-  'Waller, J. (2026). Titrate Hemodynamics: An interactive, first-principles curriculum in hemodynamics (Version 2.0) [Computer software]. https://perfusia.github.io/hemodynamics'
+  'Waller, J. (2026). Titrate Hemodynamics: An interactive, first-principles curriculum in hemodynamics (Version 2.0) [Computer software]. https://titrate.icu'
 
 const HOME_REFS = [COMMON.guyton1955, COMMON.hall2025, COMMON.suga1974, COMMON.sunagawa1983, COMMON.ursino1998, COMMON.westerhof2009]
 
@@ -84,7 +84,7 @@ function CiteCard() {
     <div id="cite" className="flex flex-col gap-3 rounded-md border border-rule bg-plate p-5">
       <div className="label" style={{ fontSize: 13 }}>How to cite · APA 7</div>
       <p className="m-0 text-[16.5px] leading-[1.55]" style={{ paddingLeft: '2em', textIndent: '-2em' }}>
-        Waller, J. (2026). <i>Titrate Hemodynamics: An interactive, first-principles curriculum in hemodynamics</i> (Version 2.0) [Computer software]. https://perfusia.github.io/hemodynamics
+        Waller, J. (2026). <i>Titrate Hemodynamics: An interactive, first-principles curriculum in hemodynamics</i> (Version 2.0) [Computer software]. https://titrate.icu
       </p>
       <button type="button" className="btn self-start" onClick={copy}>{copied ? 'Copied' : 'Copy citation'}</button>
     </div>

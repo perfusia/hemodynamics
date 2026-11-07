@@ -26,7 +26,7 @@ function temmlSurrogateFix(): Plugin {
 }
 
 export default defineConfig({
-  base: '/hemodynamics/',
+  base: '/',
   plugins: [temmlSurrogateFix(), react(), tailwindcss()],
   // Served through the plugin pipeline in development so the fix applies.
   optimizeDeps: { exclude: ['temml'] },
