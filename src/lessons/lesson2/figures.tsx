@@ -78,7 +78,7 @@ export function FigureCycle() {
       }
       caption={
         <>
-          The isolated left ventricle of the HemoLab model at baseline, filled from a left atrial pressure (Pla) of 9.5 mmHg and
+          The isolated left ventricle of the Titrate model at baseline, filled from a left atrial pressure (Pla) of 9.5 mmHg and
           ejecting into the arterial Windkessel. Left: left atrial, left ventricular and aortic pressure, with left ventricular volume
           below, as a physiological recorder would draw them. Right: the same beats as a pressure-volume loop; the moving point is the
           ventricle now, and the label names the phase it is in. The loop runs counterclockwise: filling along the bottom, isovolumic

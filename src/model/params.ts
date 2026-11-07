@@ -1,5 +1,5 @@
 /**
- * Parameter set for the HemoLab circulation model.
+ * Parameter set for the Titrate circulation model.
  *
  * Units throughout the model:
  *   volume       mL

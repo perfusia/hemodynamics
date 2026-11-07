@@ -128,7 +128,7 @@ const sections: LessonSection[] = [
           ischemia, β-blockade, volatile anesthetics, and the loss of viable myocardium after infarction flatten the ESPVR.
         </p>
         <p>
-          The HemoLab model represents each ventricle in exactly these terms. Ventricular pressure is a weighted sum of the ESPVR and
+          The Titrate model represents each ventricle in exactly these terms. Ventricular pressure is a weighted sum of the ESPVR and
           the end-diastolic relation of Section 2.4, weighted by an activation function <M t="e(t)" /> that rises from 0 to 1 during
           systole and returns to 0 in diastole:
         </p>

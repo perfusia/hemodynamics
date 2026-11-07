@@ -31,7 +31,7 @@ export function TopBar() {
   return (
     <header className="sticky top-0 z-40 border-b border-rule bg-paper/95 backdrop-blur-sm print:static">
       <div className="mx-auto flex max-w-[1360px] items-center justify-between gap-4 px-[var(--gutter)] py-2.5 font-sans">
-        <Link to="/" className="no-underline hover:text-ink" aria-label="HemoLab home">
+        <Link to="/" className="no-underline hover:text-ink" aria-label="Titrate home">
           <Wordmark />
         </Link>
 
@@ -99,13 +99,13 @@ export function Footer() {
     <footer className="border-t border-rule print:hidden">
       <div className="mx-auto flex max-w-[1360px] flex-wrap justify-between gap-x-10 gap-y-4 px-[var(--gutter)] pt-7 pb-10 font-sans text-[13.5px] text-ink-2">
         <p className="m-0 max-w-[62ch]">
-          HemoLab is an educational model. It is not a medical device, and its output must not inform the care of any patient.
+          Titrate is an educational model. It is not a medical device, and its output must not inform the care of any patient.
         </p>
         <div className="flex flex-wrap gap-x-5 gap-y-2">
           <Link to="/model">The model</Link>
           <a href={GITHUB}>Source on GitHub</a>
           <span>MIT License</span>
-          <span>Perfusia, 2026</span>
+          <span>Titrate, 2026</span>
         </div>
       </div>
     </footer>

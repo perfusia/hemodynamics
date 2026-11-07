@@ -20,8 +20,8 @@ export function Wordmark({ sub = true }: { sub?: boolean }) {
     <span className="flex items-center gap-2.5">
       <Mark />
       <span className="flex flex-col leading-none font-sans">
-        <span className="text-[18.5px] font-bold tracking-[-0.01em]">HemoLab</span>
-        {sub && <span className="mt-1 text-[10.5px] font-semibold uppercase tracking-[0.12em] text-ink-3 cond">Perfusia</span>}
+        <span className="text-[18.5px] font-bold tracking-[-0.01em]">Titrate</span>
+        {sub && <span className="mt-1 text-[10.5px] font-semibold uppercase tracking-[0.12em] text-ink-3 cond">Hemodynamics</span>}
       </span>
     </span>
   )

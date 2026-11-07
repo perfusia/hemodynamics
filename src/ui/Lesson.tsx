@@ -80,7 +80,7 @@ export function LessonPage({ meta, objectives, notation, sections, keyPoints, qu
   const next = LESSONS.find((l) => l.n === meta.n + 1 && l.available)
   const activeSec = sections.find((s) => s.id === active)
 
-  useEffect(() => { document.title = `${meta.n}. ${meta.title} · HemoLab` }, [meta])
+  useEffect(() => { document.title = `${meta.n}. ${meta.title} · Titrate` }, [meta])
 
   const toc = (
     <ol className="m-0 flex list-none flex-col gap-0.5 border-l border-rule p-0">

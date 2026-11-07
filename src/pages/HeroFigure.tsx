@@ -59,7 +59,7 @@ export function HeroFigure() {
         </div>
       </div>
       <figcaption className="px-4 pb-4 text-[15.5px] leading-[1.5] text-ink-2 md:px-5">
-        Output of the HemoLab circulation model under baseline conditions, computed beat by beat in your browser. Every lesson
+        Output of the Titrate circulation model under baseline conditions, computed beat by beat in your browser. Every lesson
         perturbs this system and reads the result here.
       </figcaption>
     </figure>

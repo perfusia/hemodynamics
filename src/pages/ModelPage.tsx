@@ -29,7 +29,7 @@ const arrow = (label: React.ReactNode, color = 'var(--color-ink-3)') => (
 )
 
 export default function ModelPage() {
-  useEffect(() => { document.title = 'The model · HemoLab' }, [])
+  useEffect(() => { document.title = 'The model · Titrate' }, [])
   const rows = useMemo(() => validateBaseline(), [])
   const svr = Math.round(UNITS.toDyn(BASELINE.Rs + BASELINE.Zc))
 
@@ -41,7 +41,7 @@ export default function ModelPage() {
           The circulation model and its validation
         </h1>
         <p className="m-0 text-ink-2" style={{ fontSize: 'clamp(18px, 1.8vw, 21px)', lineHeight: 1.5, maxWidth: '40em' }}>
-          Every figure in HemoLab is produced by one lumped-parameter model of the circulation, solved numerically in the browser.
+          Every figure in Titrate is produced by one lumped-parameter model of the circulation, solved numerically in the browser.
           This page specifies the model, states its assumptions and limitations, and compares its baseline output with adult reference
           values.
         </p>
@@ -79,7 +79,7 @@ export default function ModelPage() {
             </div>
           </div>
           <figcaption className="mt-3.5 text-[15.5px] leading-[1.5] text-ink-2">
-            <span className="font-sans font-bold text-ink">Figure M1.</span> Topology of the HemoLab model. Boxes are compliant
+            <span className="font-sans font-bold text-ink">Figure M1.</span> Topology of the Titrate model. Boxes are compliant
             compartments; labeled arrows are resistances or valves. Colors follow bedside monitor convention: arterial red, venous
             blue, pulmonary amber.
           </figcaption>
@@ -160,7 +160,7 @@ export default function ModelPage() {
         </ul>
         <div className="box" style={{ borderTopColor: 'var(--color-art)' }}>
           <div className="box-head label"><span>Not for clinical use</span></div>
-          <p className="m-0">HemoLab is an educational model. It is not a medical device, has not been validated against patient outcomes, and must not be used to guide the care of any patient.</p>
+          <p className="m-0">Titrate is an educational model. It is not a medical device, has not been validated against patient outcomes, and must not be used to guide the care of any patient.</p>
         </div>
       </section>
 

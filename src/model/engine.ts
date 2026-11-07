@@ -1,5 +1,5 @@
 /**
- * HemoLab circulation model.
+ * Titrate circulation model.
  *
  * A lumped-parameter, closed-loop model of the cardiovascular system:
  *
