@@ -1,90 +1,450 @@
 @import "tailwindcss";
 
 /* ============================================================================
-   HemoLab design tokens — "Anatomical plate"
+   HemoLab design system: "Physiological Record"
    ----------------------------------------------------------------------------
-   The reference is a printed medical atlas: toned laid paper, iron-gall ink,
-   and the two-colour plate printing used in anatomical illustration. Red chalk
-   (sanguine) has been the medium for anatomical drawing since Leonardo, and it
-   is what carries arterial meaning here. A muted Prussian indigo carries flow.
+   Two references held together. The scholarly page supplies the reading
+   surface: one measure, numbered equations, margin notes, captions and
+   references. The physiological polygraph supplies the figures: graticule
+   paper, calibration marks, and channel colors that follow bedside monitor
+   convention. The interface stays in ink, so the only color on the page is
+   physiology.
 
-   Semantic encoding survives from the monitor scheme — arterial is still red,
-   flow is still cool, resistance is still plum — but rendered in pigments that
-   belong on paper instead of on a screen at 3am.
+     SURFACE   paper, plate, card, rules, graticule
+     INK       three weights
+     CHANNEL   arterial, venous, pulmonary, flow and volume, load
+     FEEDBACK  correct, incorrect (review questions only)
 
-     SURFACE   toned paper, three depths
-     INK       iron-gall brown-black, three weights
-     PIGMENT   sanguine, indigo, plum, verdigris, ochre
-     ISO 26825 drug identity, unchanged — it is a real standard
+   Light is the default; [data-theme="dark"] (or the OS preference when no
+   explicit choice is stored) switches to the Night palette, which renders
+   the same figures as a monitor would.
 
-   Only this file and src/shared/tokens.ts may contain hex literals.
+   Only this file and src/ui/theme.ts may contain color literals.
    ========================================================================= */
 
+@font-face {
+  font-family: "STIX Two Math";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./assets/fonts/STIXTwoMath-Regular.woff2") format("woff2");
+}
+
 @theme {
-  /* --- Surface ----------------------------------------------------------- */
-  --color-paper:        #F2EADB;  /* the page */
-  --color-paper-raised: #FAF6EC;  /* a plate tipped onto the page */
-  --color-paper-deep:   #E8DFCB;  /* a recessed panel */
-  --color-rule:         #D6C9AE;  /* hairline */
-  --color-rule-strong:  #B39F7C;  /* the heavy half of a double rule */
+  --color-paper: #fafbfb;
+  --color-plate: #f1f3f4;
+  --color-plate-2: #e8ecee;
+  --color-card: #fcfdfd;
+  --color-rule: #d4dadf;
+  --color-rule-2: #a9b2ba;
+  --color-grid: #e1e6e9;
+  --color-grid-major: #c9d0d6;
 
-  /* --- Ink --------------------------------------------------------------- */
-  --color-ink:       #2B2118;
-  --color-ink-soft:  #5C4E3E;
-  --color-ink-faint: #6F5F45;
+  --color-ink: #11161b;
+  --color-ink-2: #39424c;
+  --color-ink-3: #5a646f;
+  --color-on-ink: #fafbfb;
 
-  /* --- Pigment ----------------------------------------------------------- */
-  --color-sanguine:  #9E3B26;  /* arterial pressure, critical */
-  --color-indigo:    #2F4858;  /* flow, cardiac output, interactive */
-  --color-plum:      #6B4A63;  /* vascular resistance */
-  --color-verdigris: #4A6B57;  /* within normal limits */
-  --color-ochre:     #8A6318;  /* caution */
+  --color-art: #c3252d;
+  --color-ven: #1f5aa6;
+  --color-pa: #a86100;
+  --color-flow: #0e7470;
+  --color-load: #6b3fa8;
+  --color-curve: #7d8791;
 
-  /* --- Clinical severity ------------------------------------------------- */
-  --color-status-critical: #9E3B26;
-  --color-status-warn:     #8A6318;
-  --color-status-normal:   #4A6B57;
+  --color-ok: #17784a;
+  --color-ok-bg: #e6f2eb;
+  --color-bad: #b42332;
+  --color-bad-bg: #fbeaec;
 
-  /* --- ISO 26825 syringe label ------------------------------------------- */
-  --color-iso-pressor:         #A05EB5;
-  --color-iso-hypotensive:     #A05EB5;
-  --color-iso-induction:       #F2C500;
-  --color-iso-opioid:          #64B5F6;
-  --color-iso-relaxant:        #FF5252;
-  --color-iso-anticholinergic: #4CAF50;
-  --color-iso-local:           #9E9E9E;
-
-  /* --- Type -------------------------------------------------------------- */
-  --font-display: "Literata", Georgia, "Times New Roman", serif;
-  --font-sans:    "IBM Plex Sans", system-ui, -apple-system, sans-serif;
-  --font-mono:    "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-sans: "Archivo Variable", "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "STIX Two Text Variable", "STIX Two Math", "STIX Two Text", "Times New Roman", serif;
+  --font-math: "STIX Two Math", math;
 }
 
-html, body, #root {
-  background-color: var(--color-paper);
-  color: var(--color-ink);
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
-  font-family: var(--font-display);
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
+@layer base {
+  :root {
+    color-scheme: light;
+    --measure: 680px;
+    --note-w: 250px;
+    --note-gap: 44px;
+    --wide: calc(var(--measure) + var(--note-gap) + var(--note-w));
+    --gutter: clamp(16px, 3.4vw, 44px);
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --color-paper: #0c1014;
+    --color-plate: #131a20;
+    --color-plate-2: #18212a;
+    --color-card: #0f151a;
+    --color-rule: #26313a;
+    --color-rule-2: #3d4955;
+    --color-grid: #1a232b;
+    --color-grid-major: #2a3540;
+    --color-ink: #e3e8ec;
+    --color-ink-2: #b9c3cc;
+    --color-ink-3: #93a0ac;
+    --color-on-ink: #0c1014;
+    --color-art: #ff5c63;
+    --color-ven: #63a7ff;
+    --color-pa: #f2b33d;
+    --color-flow: #3cc8bf;
+    --color-load: #b593ff;
+    --color-curve: #8a97a3;
+    --color-ok: #4cc38a;
+    --color-ok-bg: #10261b;
+    --color-bad: #ff7a86;
+    --color-bad-bg: #2b1519;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --color-paper: #0c1014;
+      --color-plate: #131a20;
+      --color-plate-2: #18212a;
+      --color-card: #0f151a;
+      --color-rule: #26313a;
+      --color-rule-2: #3d4955;
+      --color-grid: #1a232b;
+      --color-grid-major: #2a3540;
+      --color-ink: #e3e8ec;
+      --color-ink-2: #b9c3cc;
+      --color-ink-3: #93a0ac;
+      --color-on-ink: #0c1014;
+      --color-art: #ff5c63;
+      --color-ven: #63a7ff;
+      --color-pa: #f2b33d;
+      --color-flow: #3cc8bf;
+      --color-load: #b593ff;
+      --color-curve: #8a97a3;
+      --color-ok: #4cc38a;
+      --color-ok-bg: #10261b;
+      --color-bad: #ff7a86;
+      --color-bad-bg: #2b1519;
+    }
+  }
+
+  html {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 84px;
+  }
+  body {
+    margin: 0;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-serif);
+    font-size: 18.5px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-kerning: normal;
+  }
+  @media (max-width: 640px) {
+    body { font-size: 17.5px; line-height: 1.6; }
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  a:hover { color: var(--color-art); }
+  :focus-visible { outline: 2px solid var(--color-ink); outline-offset: 3px; border-radius: 2px; }
+  button { font: inherit; color: inherit; }
+  sub, sup { line-height: 0; }
+  ::selection { background: color-mix(in oklab, var(--color-ven) 22%, transparent); }
+
+  /* MathML, rendered by temml in STIX Two Math. */
+  math {
+    font-family: var(--font-math);
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    text-indent: 0;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    direction: ltr;
+    font-feature-settings: "dtls" off;
+    font-size: 1.04em;
+  }
+  math * { border-color: currentColor; }
+  math.tml-display { display: block; width: 100%; }
+  mfrac > :nth-child(2), msqrt, mover > :first-child { math-shift: compact; }
 }
 
-* { box-sizing: border-box; }
-
-/* Measured values use tabular figures so digits hold their column while a
-   slider is dragged. */
-.tnum { font-variant-numeric: tabular-nums lining-nums; font-feature-settings: "tnum","lnum"; }
-
-/* Printer's double rule: thin over thick, as used beneath plate captions. */
-.rule-double {
-  border-bottom: 3px solid var(--color-rule-strong);
-  box-shadow: 0 -2px 0 -1px var(--color-rule-strong);
+@layer utilities {
+  .tnum { font-variant-numeric: tabular-nums lining-nums; }
+  .cond { font-stretch: 82%; }
+  .label {
+    font-family: var(--font-sans);
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  }
 }
 
-:focus-visible { outline: 2px solid var(--color-indigo); outline-offset: 2px; }
+/* ---------------------------------------------------------------------------
+   Lesson prose
+   ------------------------------------------------------------------------ */
+@layer components {
+  .prose { counter-reset: sidenote; }
+  .prose > p,
+  .prose .p,
+  .prose > ul,
+  .prose > ol,
+  .prose > h2,
+  .prose > h3,
+  .prose > .eq,
+  .prose > .narrow {
+    max-width: var(--measure);
+  }
+  .prose p { margin: 0 0 1.05em; text-wrap: pretty; hyphens: manual; }
+  .prose h2.section {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin: 2.6em 0 0.8em;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(25px, 2.4vw, 30px);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+  .prose h2.section .num {
+    font-size: 0.62em;
+    font-weight: 600;
+    font-stretch: 80%;
+    color: var(--color-ink-3);
+    flex: none;
+  }
+  .prose h3.sub {
+    margin: 1.9em 0 0.55em;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 19px;
+    letter-spacing: -0.005em;
+  }
+  .prose ul.bul, .prose ol.num { padding-left: 1.3em; margin: 0 0 1.1em; }
+  .prose ul.bul li, .prose ol.num li { margin: 0 0 0.45em; }
+  .prose strong { font-weight: 600; }
+  .prose .term { font-style: italic; }
+
+  /* Sidenotes: in the margin on wide screens, toggled inline on narrow ones. */
+  .sn-ref {
+    counter-increment: sidenote;
+    display: inline;
+    padding: 0 1px;
+    margin: 0;
+    border: 0;
+    background: none;
+    cursor: default;
+    font-family: var(--font-sans);
+    font-size: 0.62em;
+    font-weight: 700;
+    vertical-align: 0.62em;
+    line-height: 0;
+    color: var(--color-ink);
+  }
+  .sn-ref::after { content: counter(sidenote); }
+  .sidenote {
+    float: right;
+    clear: right;
+    width: var(--note-w);
+    margin-right: calc(-1 * (var(--note-w) + var(--note-gap)));
+    margin-top: 0.25em;
+    margin-bottom: 1em;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--color-ink-2);
+    text-indent: 0;
+  }
+  .sidenote::before {
+    content: counter(sidenote);
+    font-family: var(--font-sans);
+    font-weight: 700;
+    color: var(--color-ink);
+    margin-right: 6px;
+  }
+  @media (max-width: 1099px) {
+    .sn-ref {
+      cursor: pointer;
+      background: var(--color-ink);
+      color: var(--color-on-ink);
+      border-radius: 3px;
+      padding: 1px 5px;
+      margin-left: 2px;
+      vertical-align: 0.35em;
+      line-height: 1.2;
+    }
+    .sidenote {
+      display: none;
+      float: none;
+      width: auto;
+      margin: 0.6em 0 0.8em;
+      padding: 10px 12px;
+      background: var(--color-plate);
+      border-top: 1px solid var(--color-rule-2);
+    }
+    .sidenote[data-open="true"] { display: block; }
+  }
+
+  /* Display equations. */
+  .eq {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 0.4em 0 1.2em;
+    padding: 0.5em 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .eq.ruled { border-top: 1px solid var(--color-rule); border-bottom: 1px solid var(--color-rule); padding: 0.9em 0; }
+  .eq .eq-body { flex: 1 1 auto; min-width: 0; padding-left: 1.6em; font-size: 1.12em; }
+  .eq .eq-body math.tml-display { text-align: left; }
+  .eq .eq-num { flex: none; color: var(--color-ink-3); font-size: 0.92em; font-variant-numeric: lining-nums; }
+  @media (max-width: 640px) { .eq .eq-body { padding-left: 0; font-size: 1.04em; } }
+
+  /* Boxes: numbered asides with a top rule. */
+  .box {
+    max-width: var(--measure);
+    margin: 1.6em 0 1.8em;
+    padding: 14px 20px 16px;
+    background: var(--color-plate);
+    border-top: 2px solid var(--color-ink);
+  }
+  .box .box-head {
+    display: flex; flex-wrap: wrap; gap: 4px 14px; margin-bottom: 8px;
+  }
+  .box .box-head .kind { color: var(--color-ink-3); }
+  .box p { font-size: 17px; line-height: 1.6; }
+  .box p:last-child { margin-bottom: 0; }
+
+  /* Figure plates. */
+  .figure {
+    width: 100%;
+    max-width: var(--wide);
+    margin: 2em 0 2.2em;
+    background: var(--color-plate);
+    border: 1px solid var(--color-rule);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  @media (max-width: 640px) {
+    .figure { border-radius: 0; border-left: 0; border-right: 0; margin-left: calc(-1 * var(--gutter)); margin-right: calc(-1 * var(--gutter)); width: calc(100% + 2 * var(--gutter)); max-width: none; }
+  }
+  .figure .fig-head {
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+    gap: 8px 18px; padding: 12px 18px; border-bottom: 1px solid var(--color-rule);
+    font-family: var(--font-sans);
+  }
+  .figure .fig-body { padding: 18px; }
+  .figure figcaption {
+    padding: 2px 18px 18px;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--color-ink-2);
+    max-width: 62em;
+  }
+  .figure figcaption .fig-label { font-family: var(--font-sans); font-weight: 700; color: var(--color-ink); margin-right: 4px; }
+  .badge {
+    font-family: var(--font-sans); font-size: 11.5px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--color-flow); border: 1px solid currentColor;
+    border-radius: 3px; padding: 1px 6px;
+  }
+
+  /* Controls. */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 40px; padding: 0 14px; border-radius: 4px;
+    font-family: var(--font-sans); font-size: 14px; font-weight: 600; line-height: 1.1;
+    border: 1px solid var(--color-rule-2); background: var(--color-card); color: var(--color-ink);
+    cursor: pointer; transition: background-color 120ms, border-color 120ms, color 120ms;
+    white-space: nowrap;
+  }
+  .btn:hover { border-color: var(--color-ink); }
+  .btn.primary { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-on-ink); }
+  .btn.primary:hover { background: color-mix(in oklab, var(--color-ink) 86%, var(--color-paper)); }
+  .btn.sm { min-height: 34px; padding: 0 11px; font-size: 13.5px; }
+  .btn[aria-pressed="true"] { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-on-ink); }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  @media (pointer: coarse) { .btn { min-height: 44px; } .btn.sm { min-height: 40px; } }
+
+  .seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--color-ink); border-radius: 4px; overflow: hidden; }
+  .seg button {
+    min-height: 36px; padding: 0 12px; border: 0; border-left: 1px solid var(--color-ink);
+    background: var(--color-card); color: var(--color-ink);
+    font-family: var(--font-sans); font-size: 13.5px; font-weight: 600; cursor: pointer;
+  }
+  .seg button:first-child { border-left: 0; }
+  .seg button[aria-pressed="true"] { background: var(--color-ink); color: var(--color-on-ink); }
+  @media (pointer: coarse) { .seg button { min-height: 44px; } }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .slider { display: flex; flex-direction: column; gap: 3px; font-family: var(--font-sans); }
+  .slider .s-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .slider .s-name { font-size: 14px; font-weight: 600; }
+  .slider .s-name .s-sym { font-family: var(--font-serif); font-weight: 400; font-style: italic; color: var(--color-ink-3); margin-left: 6px; }
+  .slider .s-val { font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .slider .s-unit { font-size: 12px; font-weight: 400; color: var(--color-ink-3); margin-left: 3px; }
+  .slider .s-scale { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--color-ink-3); font-variant-numeric: tabular-nums; }
+  .slider input[type="range"] {
+    -webkit-appearance: none; appearance: none; width: 100%; height: 26px; margin: 2px 0; background: transparent; cursor: pointer;
+  }
+  .slider input[type="range"]::-webkit-slider-runnable-track {
+    height: 3px; border-radius: 2px;
+    background: linear-gradient(to right, var(--color-ink) var(--fill, 50%), var(--color-rule-2) var(--fill, 50%));
+  }
+  .slider input[type="range"]::-moz-range-track { height: 3px; border-radius: 2px; background: var(--color-rule-2); }
+  .slider input[type="range"]::-moz-range-progress { height: 3px; border-radius: 2px; background: var(--color-ink); }
+  .slider input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none; width: 18px; height: 18px; margin-top: -7.5px;
+    border-radius: 50%; background: var(--color-card); border: 2px solid var(--color-ink);
+  }
+  .slider input[type="range"]::-moz-range-thumb {
+    width: 14px; height: 14px; border-radius: 50%; background: var(--color-card); border: 2px solid var(--color-ink);
+  }
+  .slider input[type="range"]:focus-visible { outline: none; }
+  .slider input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px var(--color-paper), 0 0 0 5px var(--color-ink); }
+  @media (pointer: coarse) { .slider input[type="range"] { height: 36px; } .slider input[type="range"]::-webkit-slider-thumb { width: 24px; height: 24px; margin-top: -10.5px; } }
+
+  /* Readouts. */
+  .readouts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--ro-min, 104px), 100%), 1fr));
+    gap: 1px; background: var(--color-rule); border: 1px solid var(--color-rule);
+    font-family: var(--font-sans);
+  }
+  .readouts .ro { background: var(--color-card); padding: 8px 11px 9px; min-width: 0; }
+  .readouts .ro-k { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; color: var(--color-ink-3); white-space: nowrap; }
+  .readouts .ro-v { font-size: 25px; font-weight: 600; font-stretch: 80%; line-height: 1.12; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .readouts .ro-u { font-size: 11.5px; color: var(--color-ink-3); white-space: nowrap; }
+  .readouts.lg .ro-v { font-size: 32px; }
+
+  /* Tables. */
+  .tbl-wrap { max-width: var(--wide); overflow-x: auto; margin: 1.4em 0 1.8em; border-top: 2px solid var(--color-ink); border-bottom: 2px solid var(--color-ink); }
+  .tbl-wrap .tbl-cap { font-family: var(--font-sans); font-size: 14px; padding: 9px 0; border-bottom: 1px solid var(--color-ink); }
+  .tbl { width: 100%; border-collapse: collapse; font-family: var(--font-sans); font-size: 14.5px; font-variant-numeric: tabular-nums; }
+  .tbl th { text-align: left; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-ink-3); padding: 9px 12px 7px 0; vertical-align: bottom; }
+  .tbl td { padding: 8px 12px 8px 0; border-top: 1px solid var(--color-rule); vertical-align: top; }
+  .tbl td.r, .tbl th.r { text-align: right; }
+  .tbl td.serif { font-family: var(--font-serif); font-size: 16px; }
+  .tbl-note { font-family: var(--font-sans); font-size: 12.5px; color: var(--color-ink-3); padding: 9px 0; line-height: 1.45; }
+
+  /* References. */
+  .refs { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 11px; font-size: 16px; line-height: 1.5; }
+  .refs li { padding-left: 2em; text-indent: -2em; overflow-wrap: anywhere; }
+  .refs li:target { background: color-mix(in oklab, var(--color-ven) 10%, transparent); }
+}
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }

@@ -1,15 +1,21 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/hemodynamics/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="HemoLab is a free, open interactive hemodynamics trainer for critical care nurses. Move a variable, watch the physiology respond, and read why." />
-    <meta name="theme-color" content="#F4F6F2" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-    <title>HemoLab — Perfusia</title>
+    <meta name="description" content="HemoLab is an open, interactive curriculum in cardiovascular physiology for anesthesia and critical care. Every figure is computed by a closed-loop model of the circulation that runs in the browser." />
+    <meta name="theme-color" content="#fafbfb" />
+    <meta property="og:title" content="HemoLab: cardiovascular physiology from first principles" />
+    <meta property="og:description" content="An interactive, first-principles curriculum in hemodynamics for anesthesia and critical care." />
+    <meta property="og:type" content="website" />
+    <title>HemoLab · Cardiovascular physiology from first principles</title>
+    <script>
+      try {
+        var t = localStorage.getItem('hemolab.theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>
