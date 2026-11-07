@@ -30,7 +30,7 @@ export function HeroFigure() {
 
   return (
     <figure className="m-0 overflow-hidden rounded-md border border-rule bg-plate">
-      <div className="fig-head">
+      <div className="fig-head flex flex-wrap items-center justify-between gap-x-[18px] gap-y-2 border-b border-rule px-4 py-3 font-sans md:px-5">
         <div className="flex flex-wrap items-baseline gap-x-3.5 gap-y-1">
           <span className="label" style={{ fontSize: 13, letterSpacing: '0.06em' }}>Figure 1</span>
           <span className="text-[15px] font-medium">The model at rest</span>
