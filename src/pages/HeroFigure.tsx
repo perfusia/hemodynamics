@@ -53,7 +53,7 @@ export function HeroFigure() {
             <PVDiagram
               loops={[{ beat, kind: 'main' }]}
               Ees={params.lv.Ees} V0={params.lv.V0} A={params.lv.A} B={params.lv.B}
-              showEa={false} xMax={160} yMax={140}
+              showEa={false} xMax={160} yMax={120}
             />
           )}
         </div>
